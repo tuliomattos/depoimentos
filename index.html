@@ -507,8 +507,8 @@
             const currentYear = document.getElementById('currentYear');
             const profileImage = document.getElementById('profileImage');
             
-            // SUA URL DO GOOGLE APPS SCRIPT (CORRETA)
-            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbybkH9uDl2sx65lbSbZyBQJEkcgZjLAQshHsCJY5dOQXMoGTwZ_pPUSaSbHEKz7rrtOLQ/exec";
+            // NOVA URL DO GOOGLE APPS SCRIPT (CORRIGIDA)
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
             
             // Definir ano atual no footer
             currentYear.textContent = new Date().getFullYear();
@@ -612,10 +612,8 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // Enviar para o Google Sheets - VERSÃO CORRIGIDA
+                    // Enviar para o Google Sheets
                     console.log('Enviando depoimento para:', WEB_APP_URL);
-                    console.log('Dados:', testimonial);
-                    
                     const response = await fetch(WEB_APP_URL, {
                         method: 'POST',
                         headers: { 
@@ -629,7 +627,7 @@
                     console.log('Resposta do servidor:', result);
                     
                     if (result.success) {
-                        alert('✅ Depoimento salvo com sucesso! Obrigado por compartilhar sua experiência.');
+                        alert('✅ Depoimento salvo com sucesso!');
                         
                         // Resetar formulário
                         testimonialForm.reset();
@@ -639,12 +637,12 @@
                         // Recarregar depoimentos após 2 segundos
                         setTimeout(loadTestimonials, 2000);
                     } else {
-                        alert('❌ Erro: ' + (result.message || 'Não foi possível salvar o depoimento.'));
+                        alert('❌ Erro: ' + (result.message || 'Não foi possível salvar'));
                     }
                     
                 } catch (error) {
                     console.error('Erro ao enviar:', error);
-                    alert('⚠️ Problema de conexão. O depoimento pode ter sido salvo. Verifique sua planilha.');
+                    alert('⚠️ Problema de conexão. Tente novamente.');
                 } finally {
                     // Restaurar botão
                     submitBtn.innerHTML = originalText;
@@ -657,22 +655,21 @@
                 try {
                     console.log('Carregando depoimentos de:', WEB_APP_URL);
                     
-                    // Adiciona um timestamp para evitar cache
+                    // Adiciona timestamp para evitar cache
                     const response = await fetch(`${WEB_APP_URL}?t=${Date.now()}`);
                     
                     if (!response.ok) {
-                        throw new Error(`Falha ao carregar: ${response.status} ${response.statusText}`);
+                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
                     }
                     
                     const testimonials = await response.json();
-                    console.log(`Carregados ${testimonials.length} depoimentos`, testimonials);
+                    console.log(`Carregados ${testimonials.length} depoimentos`);
                     
                     // Atualizar contador
                     updateCounter(testimonials.length);
                     
                     // Limpar depoimentos atuais
-                    const existingTestimonials = document.querySelectorAll('.testimonial');
-                    existingTestimonials.forEach(el => el.remove());
+                    document.querySelectorAll('.testimonial').forEach(el => el.remove());
                     
                     if (testimonials.length > 0) {
                         noTestimonials.style.display = 'none';
@@ -689,7 +686,9 @@
                     noTestimonials.innerHTML = `
                         <i class="fas fa-wifi-slash fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
                         <p>Não foi possível carregar os depoimentos no momento.</p>
-                        <p style="font-size: 0.8rem; margin-top: 10px;">Dica: Verifique se o Google Apps Script está publicado.</p>
+                        <button onclick="loadTestimonials()" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px;">
+                            Tentar Novamente
+                        </button>
                     `;
                     noTestimonials.style.display = 'block';
                 }
@@ -740,19 +739,6 @@
             function updateCounter(count) {
                 counterNumber.textContent = count;
             }
-            
-            // Função para testar a conexão
-            window.testConnection = async function() {
-                try {
-                    const response = await fetch(`${WEB_APP_URL}?test=${Date.now()}`);
-                    const data = await response.json();
-                    console.log('Teste de conexão:', data);
-                    alert('Conexão OK! Resposta do servidor: ' + JSON.stringify(data).substring(0, 100));
-                } catch (error) {
-                    console.error('Teste falhou:', error);
-                    alert('Falha na conexão: ' + error.message);
-                }
-            };
         });
     </script>
 </body>
