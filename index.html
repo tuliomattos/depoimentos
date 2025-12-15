@@ -25,6 +25,7 @@
             margin: 0 auto;
         }
 
+        /* Cabeçalho */
         .header {
             text-align: center;
             padding: 30px 0;
@@ -76,6 +77,7 @@
             padding: 0 20px;
         }
 
+        /* Contador de depoimentos */
         .counter-container {
             background-color: #4a5568;
             color: white;
@@ -89,6 +91,7 @@
             border: 2px solid #718096;
         }
 
+        /* Seção de formulário */
         .form-section {
             background-color: white;
             padding: 30px;
@@ -259,6 +262,7 @@
             transform: translateY(0);
         }
 
+        /* Seção de depoimentos */
         .testimonials-section {
             margin-top: 50px;
         }
@@ -343,6 +347,7 @@
             grid-column: 1 / -1;
         }
 
+        /* Footer */
         .footer {
             text-align: center;
             padding: 30px 0;
@@ -351,6 +356,7 @@
             border-top: 1px solid #e1e8f0;
         }
 
+        /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -489,17 +495,11 @@
         </footer>
     </div>
 
-    <!-- FORMULÁRIO INVISÍVEL PARA ENVIO -->
-    <form id="formularioInvisivel" method="GET" action="https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec" target="iframeInvisivel" style="display: none;">
-        <input type="hidden" name="clientName" id="inputNome">
-        <input type="hidden" name="rating" id="inputEstrelas">
-        <input type="hidden" name="tags" id="inputTags">
-        <input type="hidden" name="message" id="inputMensagem">
-    </form>
-    <iframe name="iframeInvisivel" style="display: none;"></iframe>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // URL DO SEU SCRIPT (TESTADA E FUNCIONA)
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
+            
             // Elementos
             const formulario = document.getElementById('testimonialForm');
             const textarea = document.getElementById('message');
@@ -509,17 +509,10 @@
             const contadorNumero = document.getElementById('counterNumber');
             const ano = document.getElementById('currentYear');
             
-            // Formulário invisível
-            const formInvisivel = document.getElementById('formularioInvisivel');
-            const inputNome = document.getElementById('inputNome');
-            const inputEstrelas = document.getElementById('inputEstrelas');
-            const inputTags = document.getElementById('inputTags');
-            const inputMensagem = document.getElementById('inputMensagem');
-            
             // Ano atual
             ano.textContent = new Date().getFullYear();
             
-            // Carregar depoimentos ao iniciar
+            // Carregar depoimentos
             carregarDepoimentos();
             
             // Contador de caracteres
@@ -529,72 +522,129 @@
                 contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // Enviar formulário
-            formulario.addEventListener('submit', function(e) {
+            // ENVIO UNIVERSAL (CELULAR E COMPUTADOR)
+            formulario.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 // Pegar dados
-                const nome = document.getElementById('clientName').value || 'Cliente';
+                const nome = document.getElementById('clientName').value.trim() || 'Cliente';
                 const estrela = document.querySelector('input[name="rating"]:checked');
-                const mensagem = textarea.value;
+                const mensagem = textarea.value.trim();
                 const tagsMarcadas = document.querySelectorAll('input[name="tags"]:checked');
                 const tags = Array.from(tagsMarcadas).map(cb => cb.value);
                 
                 // Validar
                 if (!estrela) {
-                    alert('Por favor, selecione uma avaliação com estrelas.');
+                    alert('Selecione as estrelas');
                     return;
                 }
                 
                 if (mensagem.length < 10) {
-                    alert('Por favor, escreva um depoimento com pelo menos 10 caracteres.');
+                    alert('Digite pelo menos 10 caracteres');
                     return;
                 }
                 
-                // Preencher formulário invisível
-                inputNome.value = nome;
-                inputEstrelas.value = estrela.value;
-                inputTags.value = JSON.stringify(tags);
-                inputMensagem.value = mensagem;
-                
-                // Mostrar carregando
+                // Botão de loading
                 const botao = document.querySelector('.btn-submit');
                 const textoOriginal = botao.innerHTML;
                 botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 botao.disabled = true;
                 
-                // Enviar
-                formInvisivel.submit();
-                
-                // Mensagem
-                alert('✅ Depoimento enviado!\n\nVerifique sua planilha do Google em alguns segundos.');
-                
-                // Limpar formulário
-                formulario.reset();
-                contador.textContent = '0/500 caracteres';
-                contador.className = 'char-counter';
-                
-                // Restaurar botão
-                setTimeout(function() {
-                    botao.innerHTML = textoOriginal;
-                    botao.disabled = false;
-                    // Recarregar depois
-                    setTimeout(carregarDepoimentos, 3000);
-                }, 2000);
+                try {
+                    // MÉTODO 1: Tenta enviar direto (computador e celulares modernos)
+                    const enviado = await enviarDepoimento(nome, estrela.value, tags, mensagem);
+                    
+                    if (enviado) {
+                        // Sucesso
+                        alert('✅ Depoimento salvo!');
+                        formulario.reset();
+                        contador.textContent = '0/500 caracteres';
+                        contador.className = 'char-counter';
+                        
+                        // Recarregar lista
+                        setTimeout(carregarDepoimentos, 2000);
+                    } else {
+                        // MÉTODO 2: Abre link manual (celulares antigos/bloqueados)
+                        const linkManual = criarLinkManual(nome, estrela.value, tags, mensagem);
+                        
+                        alert('📱 Para salvar no celular:\n\n1. CLIQUE EM OK\n2. Depois ABRA ESTE LINK:\n\n' + 
+                              linkManual + '\n\n3. Volte para esta página');
+                        
+                        // Tenta abrir automaticamente
+                        window.open(linkManual, '_blank');
+                        
+                        formulario.reset();
+                        contador.textContent = '0/500 caracteres';
+                        contador.className = 'char-counter';
+                    }
+                    
+                } catch (erro) {
+                    console.error('Erro:', erro);
+                    alert('⚠️ Tente novamente');
+                } finally {
+                    // Restaurar botão
+                    setTimeout(() => {
+                        botao.innerHTML = textoOriginal;
+                        botao.disabled = false;
+                    }, 1000);
+                }
             });
             
-            // Carregar depoimentos
+            // FUNÇÃO PARA ENVIAR DEPOIMENTO (Método principal)
+            async function enviarDepoimento(nome, estrelas, tags, mensagem) {
+                try {
+                    // Constrói URL igual ao link que funcionou
+                    const params = new URLSearchParams();
+                    params.append('clientName', nome);
+                    params.append('rating', estrelas);
+                    params.append('tags', JSON.stringify(tags));
+                    params.append('message', mensagem);
+                    
+                    const urlCompleta = `${SCRIPT_URL}?${params.toString()}`;
+                    console.log('Enviando para:', urlCompleta);
+                    
+                    // Tenta enviar (timeout curto para não travar)
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    const resposta = await fetch(urlCompleta, {
+                        method: 'GET',
+                        signal: controller.signal,
+                        mode: 'no-cors' // Importante para celular
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    return true; // Com 'no-cors' não podemos ver resposta, assume sucesso
+                    
+                } catch (erro) {
+                    console.log('Erro no envio direto:', erro);
+                    return false;
+                }
+            }
+            
+            // FUNÇÃO PARA CRIAR LINK MANUAL (fallback)
+            function criarLinkManual(nome, estrelas, tags, mensagem) {
+                const params = new URLSearchParams();
+                params.append('clientName', encodeURIComponent(nome));
+                params.append('rating', estrelas);
+                params.append('tags', encodeURIComponent(JSON.stringify(tags)));
+                params.append('message', encodeURIComponent(mensagem));
+                params.append('manual', 'true');
+                
+                return `${SCRIPT_URL}?${params.toString()}`;
+            }
+            
+            // CARREGAR DEPOIMENTOS
             async function carregarDepoimentos() {
                 try {
-                    const resposta = await fetch('https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec?t=' + Date.now());
+                    const resposta = await fetch(`${SCRIPT_URL}?lista=true&t=${Date.now()}`);
                     const depoimentos = await resposta.json();
                     
                     // Atualizar contador
                     contadorNumero.textContent = depoimentos.length || 0;
                     
                     // Limpar
-                    const depoimentosExistentes = document.querySelectorAll('.testimonial');
-                    depoimentosExistentes.forEach(el => el.remove());
+                    document.querySelectorAll('.testimonial').forEach(el => el.remove());
                     
                     // Mostrar
                     if (depoimentos.length > 0) {
@@ -606,16 +656,16 @@
                             div.className = 'testimonial';
                             
                             // Estrelas
-                            let estrelas = '';
+                            let estrelasHTML = '';
                             for (let i = 1; i <= 5; i++) {
-                                estrelas += i <= dep.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+                                estrelasHTML += i <= dep.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
                             }
                             
                             // Tags
                             let tagsHTML = '';
                             if (dep.tags && dep.tags.length > 0) {
                                 dep.tags.forEach(tag => {
-                                    tagsHTML += '<span class="testimonial-tag">' + tag + '</span>';
+                                    tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
                                 });
                             }
                             
@@ -626,9 +676,9 @@
                                         <div class="testimonial-client">${dep.clientName || 'Cliente'}</div>
                                         <div class="testimonial-date">${dep.date || ''}</div>
                                     </div>
-                                    <div class="testimonial-stars">${estrelas}</div>
+                                    <div class="testimonial-stars">${estrelasHTML}</div>
                                 </div>
-                                ${tagsHTML ? '<div class="testimonial-tags">' + tagsHTML + '</div>' : ''}
+                                ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
                                 <div class="testimonial-text">${dep.message || ''}</div>
                             `;
                             
@@ -641,6 +691,17 @@
                     console.log('Erro ao carregar:', erro);
                 }
             }
+            
+            // Botão de teste (oculto, só para desenvolvimento)
+            const testButton = document.createElement('button');
+            testButton.innerHTML = '🔧 Teste';
+            testButton.style.cssText = 'position: fixed; bottom: 10px; right: 10px; padding: 5px 10px; background: orange; border: none; border-radius: 5px; z-index: 1000;';
+            testButton.onclick = function() {
+                const linkTeste = SCRIPT_URL + '?clientName=TESTE&rating=5&message=Teste+automatico&tags=["teste"]';
+                window.open(linkTeste, '_blank');
+                alert('Teste aberto em nova aba');
+            };
+            document.body.appendChild(testButton);
         });
     </script>
 </body>
