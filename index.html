@@ -302,6 +302,13 @@
             font-size: 1.1rem;
         }
 
+        .testimonial-client-city {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
         .testimonial-stars {
             color: #ffc107;
             font-size: 1.2rem;
@@ -416,6 +423,11 @@
                     <input type="text" id="clientName" name="clientName" placeholder="Como gostaria de ser identificado">
                 </div>
 
+                <div class="form-group">
+                    <label for="clientCity">Sua cidade (opcional):</label>
+                    <input type="text" id="clientCity" name="clientCity" placeholder="Ex: São Paulo, Campinas, etc.">
+                </div>
+
                 <div class="form-group star-rating-container">
                     <label>Avaliação com estrelas:</label>
                     <div class="star-rating">
@@ -523,6 +535,7 @@
                 
                 // Pegar dados
                 const nome = document.getElementById('clientName').value.trim() || 'Cliente';
+                const cidade = document.getElementById('clientCity').value.trim() || '';
                 const estrela = document.querySelector('input[name="rating"]:checked');
                 const mensagem = textarea.value.trim();
                 const tagsMarcadas = document.querySelectorAll('input[name="tags"]:checked');
@@ -548,6 +561,7 @@
                 // Criar link de envio
                 const linkEnvio = SCRIPT_URL + '?' +
                     'clientName=' + encodeURIComponent(nome) +
+                    '&clientCity=' + encodeURIComponent(cidade) +
                     '&rating=' + estrela.value +
                     '&tags=' + encodeURIComponent(JSON.stringify(tags)) +
                     '&message=' + encodeURIComponent(mensagem);
@@ -659,6 +673,19 @@
                 }
             }
             
+            // Função para formatar data no padrão brasileiro
+            function formatarDataBR(dataString) {
+                if (!dataString) return '';
+                
+                try {
+                    const data = new Date(dataString);
+                    // Formato: DD/MM/AAAA
+                    return data.toLocaleDateString('pt-BR');
+                } catch (erro) {
+                    return dataString; // Retorna original se der erro
+                }
+            }
+            
             // Carregar depoimentos da planilha
             async function carregarDepoimentos() {
                 try {
@@ -698,7 +725,8 @@
                                 <div class="testimonial-header">
                                     <div>
                                         <div class="testimonial-client">${dep.clientName || 'Cliente'}</div>
-                                        <div class="testimonial-date">${dep.date || ''}</div>
+                                        ${dep.clientCity ? `<div class="testimonial-client-city">${dep.clientCity}</div>` : ''}
+                                        <div class="testimonial-date">${formatarDataBR(dep.date)}</div>
                                     </div>
                                     <div class="testimonial-stars">${estrelasHTML}</div>
                                 </div>
