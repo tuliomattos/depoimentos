@@ -394,7 +394,9 @@
     <div class="container">
         <header class="header">
             <div class="profile-container">
-                <img src="https://via.placeholder.com/130x130/1a3a5f/FFFFFF?text=TM" alt="Dr. Túlio Mattos" class="profile-img">
+                <!-- FOTO CORRIGIDA para GitHub -->
+                <img src="./fotos/perfil.jpeg" alt="Dr. Túlio Mattos" class="profile-img" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjY1IiB5PSI3NSIgZm9udC1zaXplPSI0NSIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+VE08L3RleHQ+PC9zdmc+'">
                 <div class="header-text">
                     <h1>Túlio Mattos Advogado</h1>
                     <div class="oab">OAB/SP 347.117</div>
@@ -491,7 +493,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ⭐⭐ NOVA URL CORRIGIDA ⭐⭐
+            // ⭐⭐ URL CORRIGIDA QUE FUNCIONA ⭐⭐
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEVh-Q__rfQk1ZJ203oEtanAIlpoW-AqsjAr8TUBM5cKUE2hXB_fuDqcrO17ck_pTneA/exec";
             
             // Elementos
@@ -516,8 +518,8 @@
                 contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // Enviar formulário
-            formulario.addEventListener('submit', async function(e) {
+            // ENVIO INTELIGENTE - Funciona em celular e computador
+            formulario.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Pegar dados
@@ -544,47 +546,66 @@
                 botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 botao.disabled = true;
                 
-                try {
-                    // Criar URL com parâmetros
-                    const params = new URLSearchParams();
-                    params.append('clientName', nome);
-                    params.append('rating', estrela.value);
-                    params.append('tags', JSON.stringify(tags));
-                    params.append('message', mensagem);
+                // Criar link de envio (MESMO FORMATO DOS LINKS QUE FUNCIONARAM)
+                const linkEnvio = SCRIPT_URL + '?' +
+                    'clientName=' + encodeURIComponent(nome) +
+                    '&rating=' + estrela.value +
+                    '&tags=' + encodeURIComponent(JSON.stringify(tags)) +
+                    '&message=' + encodeURIComponent(mensagem);
+                
+                // DETECTA SE É CELULAR
+                const ehCelular = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (ehCelular) {
+                    // CELULAR: Abre link em nova aba
+                    alert('📱 Para salvar no celular:\n\n1. Será aberta uma NOVA ABA\n2. Aguarde a confirmação\n3. VOLTE para esta página\n\nO depoimento será salvo automaticamente.');
                     
-                    const urlCompleta = `${SCRIPT_URL}?${params.toString()}`;
-                    
-                    // Enviar (modo no-cors para celular)
-                    await fetch(urlCompleta, {
-                        method: 'GET',
-                        mode: 'no-cors'
-                    });
-                    
-                    // Sucesso
-                    alert('✅ Depoimento salvo!');
-                    formulario.reset();
-                    contador.textContent = '0/500 caracteres';
-                    contador.className = 'char-counter';
-                    
-                    // Recarregar lista
-                    setTimeout(carregarDepoimentos, 2000);
-                    
-                } catch (erro) {
-                    console.error('Erro:', erro);
-                    alert('⚠️ Problema de conexão. Tente novamente.');
-                } finally {
-                    // Restaurar botão
                     setTimeout(() => {
+                        window.open(linkEnvio, '_blank');
+                        
+                        // Limpar formulário
+                        formulario.reset();
+                        contador.textContent = '0/500 caracteres';
+                        contador.className = 'char-counter';
+                        
+                        // Restaurar botão
                         botao.innerHTML = textoOriginal;
                         botao.disabled = false;
-                    }, 1000);
+                        
+                        // Recarregar depoimentos depois
+                        setTimeout(carregarDepoimentos, 5000);
+                    }, 500);
+                    
+                } else {
+                    // COMPUTADOR: Envia silenciosamente
+                    fetch(linkEnvio)
+                        .then(() => {
+                            alert('✅ Depoimento salvo com sucesso!');
+                            
+                            // Limpar formulário
+                            formulario.reset();
+                            contador.textContent = '0/500 caracteres';
+                            contador.className = 'char-counter';
+                            
+                            // Restaurar botão
+                            botao.innerHTML = textoOriginal;
+                            botao.disabled = false;
+                            
+                            // Recarregar depoimentos
+                            setTimeout(carregarDepoimentos, 2000);
+                        })
+                        .catch(() => {
+                            alert('⚠️ Tente novamente');
+                            botao.innerHTML = textoOriginal;
+                            botao.disabled = false;
+                        });
                 }
             });
             
             // Carregar depoimentos
             async function carregarDepoimentos() {
                 try {
-                    const resposta = await fetch(`${SCRIPT_URL}?lista=true&t=${Date.now()}`);
+                    const resposta = await fetch(SCRIPT_URL + '?t=' + Date.now());
                     const depoimentos = await resposta.json();
                     
                     // Atualizar contador
