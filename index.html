@@ -25,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* Cabeçalho */
         .header {
             text-align: center;
             padding: 30px 0;
@@ -77,7 +76,6 @@
             padding: 0 20px;
         }
 
-        /* Contador de depoimentos */
         .counter-container {
             background-color: #4a5568;
             color: white;
@@ -91,7 +89,6 @@
             border: 2px solid #718096;
         }
 
-        /* Seção de formulário */
         .form-section {
             background-color: white;
             padding: 30px;
@@ -262,7 +259,6 @@
             transform: translateY(0);
         }
 
-        /* Seção de depoimentos */
         .testimonials-section {
             margin-top: 50px;
         }
@@ -347,7 +343,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding: 30px 0;
@@ -356,7 +351,6 @@
             border-top: 1px solid #e1e8f0;
         }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -495,220 +489,158 @@
         </footer>
     </div>
 
-    <!-- FORMULÁRIO INVISÍVEL - USA MÉTODO GET -->
-    <form id="hiddenForm" method="GET" action="https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec" target="hiddenFrame" style="display: none;">
-        <input type="hidden" name="clientName" id="hiddenClientName">
-        <input type="hidden" name="rating" id="hiddenRating">
-        <input type="hidden" name="tags" id="hiddenTags">
-        <input type="hidden" name="message" id="hiddenMessage">
+    <!-- FORMULÁRIO INVISÍVEL PARA ENVIO -->
+    <form id="formularioInvisivel" method="GET" action="https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec" target="iframeInvisivel" style="display: none;">
+        <input type="hidden" name="clientName" id="inputNome">
+        <input type="hidden" name="rating" id="inputEstrelas">
+        <input type="hidden" name="tags" id="inputTags">
+        <input type="hidden" name="message" id="inputMensagem">
     </form>
-    
-    <iframe name="hiddenFrame" style="display: none;"></iframe>
+    <iframe name="iframeInvisivel" style="display: none;"></iframe>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos do DOM
-            const testimonialForm = document.getElementById('testimonialForm');
-            const messageTextarea = document.getElementById('message');
-            const charCounter = document.getElementById('charCounter');
-            const testimonialsContainer = document.getElementById('testimonialsContainer');
-            const noTestimonials = document.getElementById('noTestimonials');
-            const counterNumber = document.getElementById('counterNumber');
-            const currentYear = document.getElementById('currentYear');
-            const profileImage = document.getElementById('profileImage');
+            // Elementos
+            const formulario = document.getElementById('testimonialForm');
+            const textarea = document.getElementById('message');
+            const contador = document.getElementById('charCounter');
+            const container = document.getElementById('testimonialsContainer');
+            const semDepoimentos = document.getElementById('noTestimonials');
+            const contadorNumero = document.getElementById('counterNumber');
+            const ano = document.getElementById('currentYear');
             
-            // Elementos do formulário invisível
-            const hiddenForm = document.getElementById('hiddenForm');
-            const hiddenClientName = document.getElementById('hiddenClientName');
-            const hiddenRating = document.getElementById('hiddenRating');
-            const hiddenTags = document.getElementById('hiddenTags');
-            const hiddenMessage = document.getElementById('hiddenMessage');
+            // Formulário invisível
+            const formInvisivel = document.getElementById('formularioInvisivel');
+            const inputNome = document.getElementById('inputNome');
+            const inputEstrelas = document.getElementById('inputEstrelas');
+            const inputTags = document.getElementById('inputTags');
+            const inputMensagem = document.getElementById('inputMensagem');
             
-            // URL do Google Apps Script
-            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
-            
-            // Definir ano atual
-            currentYear.textContent = new Date().getFullYear();
-            
-            // Carregar imagem de perfil
-            function loadProfileImage() {
-                const possiblePaths = [
-                    'fotos/perfil.jpg',
-                    'fotos/perfil.jpeg',
-                    'fotos/perfil.png',
-                    'perfil.jpg',
-                    'perfil.jpeg',
-                    'perfil.png',
-                    './fotos/perfil.jpg',
-                    './fotos/perfil.jpeg',
-                    './fotos/perfil.png'
-                ];
-                
-                for (const path of possiblePaths) {
-                    const img = new Image();
-                    img.onload = function() {
-                        profileImage.src = path;
-                        return;
-                    };
-                    img.src = path;
-                }
-            }
-            
-            loadProfileImage();
+            // Ano atual
+            ano.textContent = new Date().getFullYear();
             
             // Carregar depoimentos ao iniciar
-            loadTestimonials();
+            carregarDepoimentos();
             
             // Contador de caracteres
-            messageTextarea.addEventListener('input', function() {
-                const length = this.value.length;
-                charCounter.textContent = `${length}/500 caracteres`;
-                charCounter.className = length > 480 ? 'char-counter warning' : 'char-counter';
+            textarea.addEventListener('input', function() {
+                const tamanho = this.value.length;
+                contador.textContent = tamanho + '/500 caracteres';
+                contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // Envio do formulário
-            testimonialForm.addEventListener('submit', function(e) {
+            // Enviar formulário
+            formulario.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Obter valores
-                const clientName = document.getElementById('clientName').value.trim();
-                const rating = document.querySelector('input[name="rating"]:checked');
-                const message = messageTextarea.value.trim();
-                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
-                                        .map(checkbox => checkbox.value);
+                // Pegar dados
+                const nome = document.getElementById('clientName').value || 'Cliente';
+                const estrela = document.querySelector('input[name="rating"]:checked');
+                const mensagem = textarea.value;
+                const tagsMarcadas = document.querySelectorAll('input[name="tags"]:checked');
+                const tags = Array.from(tagsMarcadas).map(cb => cb.value);
                 
-                // Validações
-                if (!rating) {
+                // Validar
+                if (!estrela) {
                     alert('Por favor, selecione uma avaliação com estrelas.');
                     return;
                 }
                 
-                if (message.length < 10) {
+                if (mensagem.length < 10) {
                     alert('Por favor, escreva um depoimento com pelo menos 10 caracteres.');
                     return;
                 }
                 
                 // Preencher formulário invisível
-                hiddenClientName.value = clientName || 'Cliente';
-                hiddenRating.value = rating.value;
-                hiddenTags.value = JSON.stringify(selectedTags);
-                hiddenMessage.value = message;
+                inputNome.value = nome;
+                inputEstrelas.value = estrela.value;
+                inputTags.value = JSON.stringify(tags);
+                inputMensagem.value = mensagem;
                 
-                // Mostrar carregamento
-                const submitBtn = document.querySelector('.btn-submit');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                submitBtn.disabled = true;
+                // Mostrar carregando
+                const botao = document.querySelector('.btn-submit');
+                const textoOriginal = botao.innerHTML;
+                botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                botao.disabled = true;
                 
-                // Enviar via GET (funciona em celular)
-                hiddenForm.submit();
+                // Enviar
+                formInvisivel.submit();
                 
-                // Mensagem otimista
-                alert('✅ Depoimento enviado! Verifique sua planilha em alguns segundos.');
+                // Mensagem
+                alert('✅ Depoimento enviado!\n\nVerifique sua planilha do Google em alguns segundos.');
                 
-                // Resetar formulário
-                testimonialForm.reset();
-                charCounter.textContent = '0/500 caracteres';
-                charCounter.className = 'char-counter';
+                // Limpar formulário
+                formulario.reset();
+                contador.textContent = '0/500 caracteres';
+                contador.className = 'char-counter';
                 
-                // Restaurar botão e recarregar
+                // Restaurar botão
                 setTimeout(function() {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    // Recarregar após 4 segundos
-                    setTimeout(loadTestimonials, 4000);
+                    botao.innerHTML = textoOriginal;
+                    botao.disabled = false;
+                    // Recarregar depois
+                    setTimeout(carregarDepoimentos, 3000);
                 }, 2000);
             });
             
             // Carregar depoimentos
-            async function loadTestimonials() {
+            async function carregarDepoimentos() {
                 try {
-                    const response = await fetch(WEB_APP_URL + '?t=' + Date.now());
-                    const data = await response.json();
+                    const resposta = await fetch('https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec?t=' + Date.now());
+                    const depoimentos = await resposta.json();
                     
-                    // Se for resposta de erro/sucesso, não é lista de depoimentos
-                    if (data && !Array.isArray(data)) {
-                        console.log('Resposta do servidor:', data);
-                        // Tenta carregar apenas os depoimentos
-                        const response2 = await fetch(WEB_APP_URL + '?lista=true&t=' + Date.now());
-                        const testimonials = await response2.json();
-                        displayTestimonials(Array.isArray(testimonials) ? testimonials : []);
-                    } else {
-                        displayTestimonials(Array.isArray(data) ? data : []);
-                    }
-                } catch (error) {
-                    console.log('Erro ao carregar:', error);
-                    displayTestimonials([]);
-                }
-            }
-            
-            // Mostrar depoimentos
-            function displayTestimonials(testimonials) {
-                // Atualizar contador
-                counterNumber.textContent = testimonials.length;
-                
-                // Limpar existentes
-                document.querySelectorAll('.testimonial').forEach(el => el.remove());
-                
-                if (testimonials.length > 0) {
-                    noTestimonials.style.display = 'none';
+                    // Atualizar contador
+                    contadorNumero.textContent = depoimentos.length || 0;
                     
-                    // Adicionar depoimentos (mais recentes primeiro)
-                    testimonials.reverse().forEach(testimonial => {
-                        const div = document.createElement('div');
-                        div.className = 'testimonial';
+                    // Limpar
+                    const depoimentosExistentes = document.querySelectorAll('.testimonial');
+                    depoimentosExistentes.forEach(el => el.remove());
+                    
+                    // Mostrar
+                    if (depoimentos.length > 0) {
+                        semDepoimentos.style.display = 'none';
                         
-                        // Estrelas
-                        let stars = '';
-                        for (let i = 1; i <= 5; i++) {
-                            stars += i <= testimonial.rating ? 
-                                '<i class="fas fa-star"></i>' : 
-                                '<i class="far fa-star"></i>';
-                        }
-                        
-                        // Tags
-                        let tagsHTML = '';
-                        if (testimonial.tags && testimonial.tags.length > 0) {
-                            testimonial.tags.forEach(tag => {
-                                tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
-                            });
-                        }
-                        
-                        // Conteúdo
-                        div.innerHTML = `
-                            <div class="testimonial-header">
-                                <div>
-                                    <div class="testimonial-client">${testimonial.clientName || 'Cliente'}</div>
-                                    <div class="testimonial-date">${testimonial.date || ''}</div>
+                        // Mais recentes primeiro
+                        depoimentos.reverse().forEach(dep => {
+                            const div = document.createElement('div');
+                            div.className = 'testimonial';
+                            
+                            // Estrelas
+                            let estrelas = '';
+                            for (let i = 1; i <= 5; i++) {
+                                estrelas += i <= dep.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+                            }
+                            
+                            // Tags
+                            let tagsHTML = '';
+                            if (dep.tags && dep.tags.length > 0) {
+                                dep.tags.forEach(tag => {
+                                    tagsHTML += '<span class="testimonial-tag">' + tag + '</span>';
+                                });
+                            }
+                            
+                            // Conteúdo
+                            div.innerHTML = `
+                                <div class="testimonial-header">
+                                    <div>
+                                        <div class="testimonial-client">${dep.clientName || 'Cliente'}</div>
+                                        <div class="testimonial-date">${dep.date || ''}</div>
+                                    </div>
+                                    <div class="testimonial-stars">${estrelas}</div>
                                 </div>
-                                <div class="testimonial-stars">${stars}</div>
-                            </div>
-                            ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
-                            <div class="testimonial-text">${testimonial.message || ''}</div>
-                        `;
-                        
-                        testimonialsContainer.appendChild(div);
-                    });
-                } else {
-                    noTestimonials.style.display = 'block';
+                                ${tagsHTML ? '<div class="testimonial-tags">' + tagsHTML + '</div>' : ''}
+                                <div class="testimonial-text">${dep.message || ''}</div>
+                            `;
+                            
+                            container.appendChild(div);
+                        });
+                    } else {
+                        semDepoimentos.style.display = 'block';
+                    }
+                } catch (erro) {
+                    console.log('Erro ao carregar:', erro);
                 }
             }
-            
-            // Botão de teste (apenas para desenvolvimento)
-            window.testarConexao = function() {
-                console.log('Testando conexão com:', WEB_APP_URL);
-                fetch(WEB_APP_URL + '?teste=1&t=' + Date.now())
-                    .then(r => r.json())
-                    .then(data => {
-                        console.log('Resposta:', data);
-                        alert('Conexão OK! Resposta: ' + JSON.stringify(data).substring(0, 100));
-                        loadTestimonials();
-                    })
-                    .catch(err => {
-                        console.error('Erro:', err);
-                        alert('Erro: ' + err.message);
-                    });
-            };
         });
     </script>
 </body>
