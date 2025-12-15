@@ -25,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* Cabeçalho */
         .header {
             text-align: center;
             padding: 30px 0;
@@ -77,7 +76,6 @@
             padding: 0 20px;
         }
 
-        /* Contador de depoimentos */
         .counter-container {
             background-color: #4a5568;
             color: white;
@@ -91,7 +89,6 @@
             border: 2px solid #718096;
         }
 
-        /* Seção de formulário */
         .form-section {
             background-color: white;
             padding: 30px;
@@ -262,7 +259,6 @@
             transform: translateY(0);
         }
 
-        /* Seção de depoimentos */
         .testimonials-section {
             margin-top: 50px;
         }
@@ -347,7 +343,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding: 30px 0;
@@ -356,7 +351,6 @@
             border-top: 1px solid #e1e8f0;
         }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -400,7 +394,7 @@
     <div class="container">
         <header class="header">
             <div class="profile-container">
-                <img src="fotos/perfil.jpg" alt="Foto do Dr. Túlio Mattos" class="profile-img" id="profileImage">
+                <img src="https://via.placeholder.com/130x130/1a3a5f/FFFFFF?text=TM" alt="Dr. Túlio Mattos" class="profile-img">
                 <div class="header-text">
                     <h1>Túlio Mattos Advogado</h1>
                     <div class="oab">OAB/SP 347.117</div>
@@ -497,8 +491,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // URL DO SEU SCRIPT (TESTADA E FUNCIONA)
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
+            // ⭐⭐ NOVA URL CORRIGIDA ⭐⭐
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEVh-Q__rfQk1ZJ203oEtanAIlpoW-AqsjAr8TUBM5cKUE2hXB_fuDqcrO17ck_pTneA/exec";
             
             // Elementos
             const formulario = document.getElementById('testimonialForm');
@@ -522,7 +516,7 @@
                 contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // ENVIO UNIVERSAL (CELULAR E COMPUTADOR)
+            // Enviar formulário
             formulario.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -551,36 +545,33 @@
                 botao.disabled = true;
                 
                 try {
-                    // MÉTODO 1: Tenta enviar direto (computador e celulares modernos)
-                    const enviado = await enviarDepoimento(nome, estrela.value, tags, mensagem);
+                    // Criar URL com parâmetros
+                    const params = new URLSearchParams();
+                    params.append('clientName', nome);
+                    params.append('rating', estrela.value);
+                    params.append('tags', JSON.stringify(tags));
+                    params.append('message', mensagem);
                     
-                    if (enviado) {
-                        // Sucesso
-                        alert('✅ Depoimento salvo!');
-                        formulario.reset();
-                        contador.textContent = '0/500 caracteres';
-                        contador.className = 'char-counter';
-                        
-                        // Recarregar lista
-                        setTimeout(carregarDepoimentos, 2000);
-                    } else {
-                        // MÉTODO 2: Abre link manual (celulares antigos/bloqueados)
-                        const linkManual = criarLinkManual(nome, estrela.value, tags, mensagem);
-                        
-                        alert('📱 Para salvar no celular:\n\n1. CLIQUE EM OK\n2. Depois ABRA ESTE LINK:\n\n' + 
-                              linkManual + '\n\n3. Volte para esta página');
-                        
-                        // Tenta abrir automaticamente
-                        window.open(linkManual, '_blank');
-                        
-                        formulario.reset();
-                        contador.textContent = '0/500 caracteres';
-                        contador.className = 'char-counter';
-                    }
+                    const urlCompleta = `${SCRIPT_URL}?${params.toString()}`;
+                    
+                    // Enviar (modo no-cors para celular)
+                    await fetch(urlCompleta, {
+                        method: 'GET',
+                        mode: 'no-cors'
+                    });
+                    
+                    // Sucesso
+                    alert('✅ Depoimento salvo!');
+                    formulario.reset();
+                    contador.textContent = '0/500 caracteres';
+                    contador.className = 'char-counter';
+                    
+                    // Recarregar lista
+                    setTimeout(carregarDepoimentos, 2000);
                     
                 } catch (erro) {
                     console.error('Erro:', erro);
-                    alert('⚠️ Tente novamente');
+                    alert('⚠️ Problema de conexão. Tente novamente.');
                 } finally {
                     // Restaurar botão
                     setTimeout(() => {
@@ -590,51 +581,7 @@
                 }
             });
             
-            // FUNÇÃO PARA ENVIAR DEPOIMENTO (Método principal)
-            async function enviarDepoimento(nome, estrelas, tags, mensagem) {
-                try {
-                    // Constrói URL igual ao link que funcionou
-                    const params = new URLSearchParams();
-                    params.append('clientName', nome);
-                    params.append('rating', estrelas);
-                    params.append('tags', JSON.stringify(tags));
-                    params.append('message', mensagem);
-                    
-                    const urlCompleta = `${SCRIPT_URL}?${params.toString()}`;
-                    console.log('Enviando para:', urlCompleta);
-                    
-                    // Tenta enviar (timeout curto para não travar)
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000);
-                    
-                    const resposta = await fetch(urlCompleta, {
-                        method: 'GET',
-                        signal: controller.signal,
-                        mode: 'no-cors' // Importante para celular
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    return true; // Com 'no-cors' não podemos ver resposta, assume sucesso
-                    
-                } catch (erro) {
-                    console.log('Erro no envio direto:', erro);
-                    return false;
-                }
-            }
-            
-            // FUNÇÃO PARA CRIAR LINK MANUAL (fallback)
-            function criarLinkManual(nome, estrelas, tags, mensagem) {
-                const params = new URLSearchParams();
-                params.append('clientName', encodeURIComponent(nome));
-                params.append('rating', estrelas);
-                params.append('tags', encodeURIComponent(JSON.stringify(tags)));
-                params.append('message', encodeURIComponent(mensagem));
-                params.append('manual', 'true');
-                
-                return `${SCRIPT_URL}?${params.toString()}`;
-            }
-            
-            // CARREGAR DEPOIMENTOS
+            // Carregar depoimentos
             async function carregarDepoimentos() {
                 try {
                     const resposta = await fetch(`${SCRIPT_URL}?lista=true&t=${Date.now()}`);
@@ -691,17 +638,6 @@
                     console.log('Erro ao carregar:', erro);
                 }
             }
-            
-            // Botão de teste (oculto, só para desenvolvimento)
-            const testButton = document.createElement('button');
-            testButton.innerHTML = '🔧 Teste';
-            testButton.style.cssText = 'position: fixed; bottom: 10px; right: 10px; padding: 5px 10px; background: orange; border: none; border-radius: 5px; z-index: 1000;';
-            testButton.onclick = function() {
-                const linkTeste = SCRIPT_URL + '?clientName=TESTE&rating=5&message=Teste+automatico&tags=["teste"]';
-                window.open(linkTeste, '_blank');
-                alert('Teste aberto em nova aba');
-            };
-            document.body.appendChild(testButton);
         });
     </script>
 </body>
