@@ -356,7 +356,7 @@
             border-top: 1px solid #e1e8f0;
         }
 
-        /* Responsividade para Celular */
+        /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.2rem;
@@ -392,40 +392,6 @@
             
             .star-labels {
                 max-width: 300px;
-            }
-            
-            .btn-submit {
-                padding: 15px 30px;
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .form-section {
-                padding: 20px;
-            }
-            
-            input[type="text"], textarea {
-                padding: 12px;
-                font-size: 16px; /* Evita zoom em iOS */
-            }
-        }
-        
-        /* Para telas muito pequenas */
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .header {
-                padding: 20px 0;
-            }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .testimonial {
-                padding: 20px;
             }
         }
     </style>
@@ -609,7 +575,7 @@
                 }
             });
             
-            // Manipular envio do formulário (VERSÃO PARA CELULAR)
+            // Manipular envio do formulário - VERSÃO PARA CELULAR
             testimonialForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -646,21 +612,33 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // ENVIO COMPATÍVEL COM CELULAR - usa mode: 'no-cors'
-                    console.log('Enviando depoimento para celular...');
+                    // MÉTODO PARA CELULAR - usa FormData
+                    const formData = new FormData();
+                    formData.append('clientName', testimonial.clientName);
+                    formData.append('rating', testimonial.rating);
+                    formData.append('tags', JSON.stringify(testimonial.tags));
+                    formData.append('message', testimonial.message);
                     
-                    // Envia os dados (não espera resposta por causa do no-cors)
-                    await fetch(WEB_APP_URL, {
+                    // Envia os dados (compatível com celular)
+                    const response = await fetch(WEB_APP_URL, {
                         method: 'POST',
-                        mode: 'no-cors',  // Isso resolve problemas em celulares
-                        headers: { 
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(testimonial)
+                        body: formData  // FormData funciona melhor em celulares
                     });
                     
-                    // Mensagem amigável para o usuário
-                    alert('✅ Depoimento enviado! Pode levar alguns segundos para aparecer.');
+                    // Tenta ler a resposta
+                    try {
+                        const result = await response.json();
+                        console.log('Resposta do servidor:', result);
+                        
+                        if (result.success) {
+                            alert('✅ Depoimento salvo com sucesso!');
+                        } else {
+                            alert('⚠️ O depoimento foi enviado, mas houve um problema: ' + (result.message || ''));
+                        }
+                    } catch (jsonError) {
+                        // Se não conseguir ler JSON, assume que foi enviado
+                        alert('✅ Depoimento enviado! Pode levar alguns segundos para aparecer.');
+                    }
                     
                     // Resetar formulário
                     testimonialForm.reset();
@@ -672,7 +650,7 @@
                     
                 } catch (error) {
                     console.error('Erro ao enviar:', error);
-                    alert('⚠️ O depoimento foi enviado, mas pode demorar para aparecer. Verifique sua planilha.');
+                    alert('⚠️ Problema de conexão. Verifique sua internet e tente novamente.');
                 } finally {
                     // Restaurar botão
                     submitBtn.innerHTML = originalText;
@@ -683,13 +661,13 @@
             // Função para carregar depoimentos do Google Sheets
             async function loadTestimonials() {
                 try {
-                    console.log('Carregando depoimentos...');
+                    console.log('Carregando depoimentos de:', WEB_APP_URL);
                     
                     // Adiciona timestamp para evitar cache
                     const response = await fetch(`${WEB_APP_URL}?t=${Date.now()}`);
                     
                     if (!response.ok) {
-                        throw new Error(`Erro ${response.status}`);
+                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
                     }
                     
                     const testimonials = await response.json();
@@ -716,9 +694,7 @@
                     noTestimonials.innerHTML = `
                         <i class="fas fa-wifi-slash fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
                         <p>Não foi possível carregar os depoimentos no momento.</p>
-                        <button onclick="location.reload()" style="margin-top: 10px; padding: 8px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px;">
-                            <i class="fas fa-sync-alt"></i> Tentar Novamente
-                        </button>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Atualize a página ou tente novamente mais tarde.</p>
                     `;
                     noTestimonials.style.display = 'block';
                 }
@@ -768,23 +744,6 @@
             // Função para atualizar o contador de depoimentos
             function updateCounter(count) {
                 counterNumber.textContent = count;
-            }
-            
-            // Botão de teste para depuração (visível apenas em desenvolvimento)
-            if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
-                const testBtn = document.createElement('button');
-                testBtn.innerHTML = '🔧 Testar Conexão';
-                testBtn.style.cssText = 'position: fixed; bottom: 10px; right: 10px; padding: 8px 12px; background: #ff9800; color: white; border: none; border-radius: 5px; z-index: 1000;';
-                testBtn.onclick = async function() {
-                    try {
-                        const response = await fetch(WEB_APP_URL);
-                        const data = await response.json();
-                        alert('Conexão OK! Depoimentos: ' + data.length);
-                    } catch (error) {
-                        alert('Erro: ' + error.message);
-                    }
-                };
-                document.body.appendChild(testBtn);
             }
         });
     </script>
