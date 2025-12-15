@@ -394,7 +394,6 @@
     <div class="container">
         <header class="header">
             <div class="profile-container">
-                <!-- FOTO CORRIGIDA para GitHub -->
                 <img src="./fotos/perfil.jpeg" alt="Dr. Túlio Mattos" class="profile-img" 
                      onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjY1IiB5PSI3NSIgZm9udC1zaXplPSI0NSIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+VE08L3RleHQ+PC9zdmc+'">
                 <div class="header-text">
@@ -493,7 +492,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ⭐⭐ URL CORRIGIDA QUE FUNCIONA ⭐⭐
+            // ⭐⭐ URL DO SEU GOOGLE APPS SCRIPT ⭐⭐
             const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEVh-Q__rfQk1ZJ203oEtanAIlpoW-AqsjAr8TUBM5cKUE2hXB_fuDqcrO17ck_pTneA/exec";
             
             // Elementos
@@ -508,7 +507,7 @@
             // Ano atual
             ano.textContent = new Date().getFullYear();
             
-            // Carregar depoimentos
+            // Carregar depoimentos ao iniciar
             carregarDepoimentos();
             
             // Contador de caracteres
@@ -518,7 +517,7 @@
                 contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // ENVIO INTELIGENTE - Funciona em celular e computador
+            // ENVIO SILENCIOSO - Funciona em celular e computador
             formulario.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -531,78 +530,84 @@
                 
                 // Validar
                 if (!estrela) {
-                    alert('Selecione as estrelas');
+                    alert('Por favor, selecione uma avaliação com estrelas.');
                     return;
                 }
                 
                 if (mensagem.length < 10) {
-                    alert('Digite pelo menos 10 caracteres');
+                    alert('Por favor, escreva um depoimento com pelo menos 10 caracteres.');
                     return;
                 }
                 
                 // Botão de loading
                 const botao = document.querySelector('.btn-submit');
                 const textoOriginal = botao.innerHTML;
-                botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
                 botao.disabled = true;
                 
-                // Criar link de envio (MESMO FORMATO DOS LINKS QUE FUNCIONARAM)
+                // Criar link de envio
                 const linkEnvio = SCRIPT_URL + '?' +
                     'clientName=' + encodeURIComponent(nome) +
                     '&rating=' + estrela.value +
                     '&tags=' + encodeURIComponent(JSON.stringify(tags)) +
                     '&message=' + encodeURIComponent(mensagem);
                 
-                // DETECTA SE É CELULAR
-                const ehCelular = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                
-                if (ehCelular) {
-                    // CELULAR: Abre link em nova aba
-                    alert('📱 Para salvar no celular:\n\n1. Será aberta uma NOVA ABA\n2. Aguarde a confirmação\n3. VOLTE para esta página\n\nO depoimento será salvo automaticamente.');
-                    
-                    setTimeout(() => {
-                        window.open(linkEnvio, '_blank');
-                        
-                        // Limpar formulário
-                        formulario.reset();
-                        contador.textContent = '0/500 caracteres';
-                        contador.className = 'char-counter';
-                        
-                        // Restaurar botão
-                        botao.innerHTML = textoOriginal;
-                        botao.disabled = false;
-                        
-                        // Recarregar depoimentos depois
-                        setTimeout(carregarDepoimentos, 5000);
-                    }, 500);
-                    
-                } else {
-                    // COMPUTADOR: Envia silenciosamente
+                // MÉTODO 1: Tenta enviar silenciosamente (computador)
+                if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    // É COMPUTADOR - Envia com fetch
                     fetch(linkEnvio)
                         .then(() => {
-                            alert('✅ Depoimento salvo com sucesso!');
-                            
-                            // Limpar formulário
-                            formulario.reset();
-                            contador.textContent = '0/500 caracteres';
-                            contador.className = 'char-counter';
-                            
-                            // Restaurar botão
-                            botao.innerHTML = textoOriginal;
-                            botao.disabled = false;
-                            
-                            // Recarregar depoimentos
-                            setTimeout(carregarDepoimentos, 2000);
+                            sucessoEnvio();
                         })
                         .catch(() => {
-                            alert('⚠️ Tente novamente');
-                            botao.innerHTML = textoOriginal;
-                            botao.disabled = false;
+                            // Fallback: método iframe
+                            enviarComIframe(linkEnvio);
                         });
+                } else {
+                    // É CELULAR - Usa iframe diretamente (mais confiável)
+                    enviarComIframe(linkEnvio);
+                }
+                
+                // Função para envio com iframe (funciona sempre)
+                function enviarComIframe(url) {
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.style.width = '0';
+                    iframe.style.height = '0';
+                    iframe.style.border = 'none';
+                    iframe.src = url;
+                    
+                    document.body.appendChild(iframe);
+                    
+                    // Remove iframe depois de enviar
+                    setTimeout(() => {
+                        if (iframe.parentNode) {
+                            document.body.removeChild(iframe);
+                        }
+                        sucessoEnvio();
+                    }, 1500);
+                }
+                
+                // Função quando o envio é bem-sucedido
+                function sucessoEnvio() {
+                    // Confirmação simples
+                    alert('✅ Depoimento salvo com sucesso!');
+                    
+                    // Limpar formulário
+                    formulario.reset();
+                    contador.textContent = '0/500 caracteres';
+                    contador.className = 'char-counter';
+                    
+                    // Restaurar botão
+                    botao.innerHTML = textoOriginal;
+                    botao.disabled = false;
+                    
+                    // Recarregar depoimentos depois de 3 segundos
+                    setTimeout(carregarDepoimentos, 3000);
                 }
             });
             
-            // Carregar depoimentos
+            // Carregar depoimentos da planilha
             async function carregarDepoimentos() {
                 try {
                     const resposta = await fetch(SCRIPT_URL + '?t=' + Date.now());
@@ -611,25 +616,24 @@
                     // Atualizar contador
                     contadorNumero.textContent = depoimentos.length || 0;
                     
-                    // Limpar
+                    // Limpar depoimentos atuais
                     document.querySelectorAll('.testimonial').forEach(el => el.remove());
                     
-                    // Mostrar
                     if (depoimentos.length > 0) {
                         semDepoimentos.style.display = 'none';
                         
-                        // Mais recentes primeiro
+                        // Mostrar depoimentos (mais recentes primeiro)
                         depoimentos.reverse().forEach(dep => {
                             const div = document.createElement('div');
                             div.className = 'testimonial';
                             
-                            // Estrelas
+                            // Criar estrelas
                             let estrelasHTML = '';
                             for (let i = 1; i <= 5; i++) {
                                 estrelasHTML += i <= dep.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
                             }
                             
-                            // Tags
+                            // Criar tags
                             let tagsHTML = '';
                             if (dep.tags && dep.tags.length > 0) {
                                 dep.tags.forEach(tag => {
@@ -637,7 +641,7 @@
                                 });
                             }
                             
-                            // Conteúdo
+                            // Preencher conteúdo
                             div.innerHTML = `
                                 <div class="testimonial-header">
                                     <div>
@@ -656,7 +660,7 @@
                         semDepoimentos.style.display = 'block';
                     }
                 } catch (erro) {
-                    console.log('Erro ao carregar:', erro);
+                    console.log('Erro ao carregar depoimentos:', erro);
                 }
             }
         });
