@@ -495,6 +495,16 @@
         </footer>
     </div>
 
+    <!-- FORMULÁRIO INVISÍVEL PARA ENVIO NO CELULAR -->
+    <form id="hiddenForm" method="POST" action="https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec" target="hiddenFrame" style="display: none;">
+        <input type="hidden" name="clientName" id="hiddenClientName">
+        <input type="hidden" name="rating" id="hiddenRating">
+        <input type="hidden" name="tags" id="hiddenTags">
+        <input type="hidden" name="message" id="hiddenMessage">
+    </form>
+    
+    <iframe name="hiddenFrame" style="display: none;"></iframe>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Elementos do DOM
@@ -507,8 +517,15 @@
             const currentYear = document.getElementById('currentYear');
             const profileImage = document.getElementById('profileImage');
             
-            // URL DO GOOGLE APPS SCRIPT
-            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
+            // Elementos do formulário invisível
+            const hiddenForm = document.getElementById('hiddenForm');
+            const hiddenClientName = document.getElementById('hiddenClientName');
+            const hiddenRating = document.getElementById('hiddenRating');
+            const hiddenTags = document.getElementById('hiddenTags');
+            const hiddenMessage = document.getElementById('hiddenMessage');
+            
+            // URL para leitura
+            const READ_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
             
             // Definir ano atual no footer
             currentYear.textContent = new Date().getFullYear();
@@ -524,17 +541,14 @@
                     'perfil.png',
                     './fotos/perfil.jpg',
                     './fotos/perfil.jpeg',
-                    './fotos/perfil.png',
-                    'images/perfil.jpg',
-                    'assets/perfil.jpg'
+                    './fotos/perfil.png'
                 ];
                 
                 let currentIndex = 0;
                 
                 function tryNextImage() {
                     if (currentIndex >= possiblePaths.length) {
-                        profileImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjxwYXRoIGQ9Ik00MCA4MUM1OS44ODI3IDgxIDc2IDY0Ljg4MjcgNzYgNDVDNzYgMjUuMTE3MyA1OS44ODI3IDkgNDAgOUMyMC4xMTczIDkgNCAyNS4xMTczIDQgNDVDNCA2NC44ODI3IDIwLjExNzMgODEgNDAgODFaIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMzIiIHI9IjEyIiBmaWxsPSIjMWEzYTVmIi8+PC9zdmc+';
-                        profileImage.alt = "Avatar padrão - Dr. Túlio Mattos";
+                        profileImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjxwYXRoIGQ9Ik00MCA4MUM1OS44ODI3IDgxIDc2IDY0Ljg4MjcgNzYgNDVDNzYgMjUuMTE3MyA1OS44ODI3IDkgNDAgOUMyMC4xMTczIDkgNCAyNS4xExNzIDQgNDVDNCA2NC44ODI3IDIwLjExNzMgODEgNDAgODFaIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMzIiIHI9IjEyIiBmaWxsPSIjMWEzYTVmIi8+PC9zdmc+';
                         return;
                     }
                     
@@ -543,7 +557,6 @@
                     
                     img.onload = function() {
                         profileImage.src = imgPath;
-                        profileImage.alt = "Foto do Dr. Túlio Mattos";
                     };
                     
                     img.onerror = function() {
@@ -575,8 +588,8 @@
                 }
             });
             
-            // Manipular envio do formulário - VERSÃO PARA CELULAR
-            testimonialForm.addEventListener('submit', async function(e) {
+            // Manipular envio do formulário
+            testimonialForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 // Obter valores do formulário
@@ -597,13 +610,11 @@
                     return;
                 }
                 
-                // Criar objeto do depoimento
-                const testimonial = {
-                    clientName: clientName || 'Cliente',
-                    rating: parseInt(rating.value),
-                    tags: selectedTags,
-                    message: message
-                };
+                // Preencher o formulário invisível
+                hiddenClientName.value = clientName || 'Cliente';
+                hiddenRating.value = rating.value;
+                hiddenTags.value = JSON.stringify(selectedTags);
+                hiddenMessage.value = message;
                 
                 // Mostrar mensagem de carregamento
                 const submitBtn = document.querySelector('.btn-submit');
@@ -611,70 +622,40 @@
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 submitBtn.disabled = true;
                 
-                try {
-                    // MÉTODO PARA CELULAR - usa FormData
-                    const formData = new FormData();
-                    formData.append('clientName', testimonial.clientName);
-                    formData.append('rating', testimonial.rating);
-                    formData.append('tags', JSON.stringify(testimonial.tags));
-                    formData.append('message', testimonial.message);
-                    
-                    // Envia os dados (compatível com celular)
-                    const response = await fetch(WEB_APP_URL, {
-                        method: 'POST',
-                        body: formData  // FormData funciona melhor em celulares
-                    });
-                    
-                    // Tenta ler a resposta
-                    try {
-                        const result = await response.json();
-                        console.log('Resposta do servidor:', result);
-                        
-                        if (result.success) {
-                            alert('✅ Depoimento salvo com sucesso!');
-                        } else {
-                            alert('⚠️ O depoimento foi enviado, mas houve um problema: ' + (result.message || ''));
-                        }
-                    } catch (jsonError) {
-                        // Se não conseguir ler JSON, assume que foi enviado
-                        alert('✅ Depoimento enviado! Pode levar alguns segundos para aparecer.');
-                    }
-                    
-                    // Resetar formulário
-                    testimonialForm.reset();
-                    charCounter.textContent = '0/500 caracteres';
-                    charCounter.classList.remove('warning');
+                // Enviar usando o formulário tradicional
+                hiddenForm.submit();
+                
+                // Mensagem para o usuário
+                alert('✅ Depoimento enviado com sucesso!');
+                
+                // Resetar formulário visível
+                testimonialForm.reset();
+                charCounter.textContent = '0/500 caracteres';
+                charCounter.classList.remove('warning');
+                
+                // Restaurar botão
+                setTimeout(function() {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                     
                     // Recarregar depoimentos após 3 segundos
                     setTimeout(loadTestimonials, 3000);
-                    
-                } catch (error) {
-                    console.error('Erro ao enviar:', error);
-                    alert('⚠️ Problema de conexão. Verifique sua internet e tente novamente.');
-                } finally {
-                    // Restaurar botão
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
+                }, 2000);
             });
             
-            // Função para carregar depoimentos do Google Sheets
+            // Função para carregar depoimentos
             async function loadTestimonials() {
                 try {
-                    console.log('Carregando depoimentos de:', WEB_APP_URL);
-                    
-                    // Adiciona timestamp para evitar cache
-                    const response = await fetch(`${WEB_APP_URL}?t=${Date.now()}`);
+                    const response = await fetch(READ_URL + '?t=' + Date.now());
                     
                     if (!response.ok) {
-                        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                        throw new Error('Erro ao carregar');
                     }
                     
                     const testimonials = await response.json();
-                    console.log(`Carregados ${testimonials.length} depoimentos`);
                     
                     // Atualizar contador
-                    updateCounter(testimonials.length);
+                    counterNumber.textContent = testimonials.length;
                     
                     // Limpar depoimentos atuais
                     document.querySelectorAll('.testimonial').forEach(el => el.remove());
@@ -682,68 +663,50 @@
                     if (testimonials.length > 0) {
                         noTestimonials.style.display = 'none';
                         
-                        // Adicionar cada depoimento ao DOM (mais recentes primeiro)
+                        // Adicionar cada depoimento
                         testimonials.reverse().forEach(testimonial => {
-                            addTestimonialToDOM(testimonial);
+                            const testimonialElement = document.createElement('div');
+                            testimonialElement.className = 'testimonial';
+                            
+                            // Criar estrelas
+                            let starsHTML = '';
+                            for (let i = 1; i <= 5; i++) {
+                                if (i <= testimonial.rating) {
+                                    starsHTML += '<i class="fas fa-star"></i>';
+                                } else {
+                                    starsHTML += '<i class="far fa-star"></i>';
+                                }
+                            }
+                            
+                            // Criar tags
+                            let tagsHTML = '';
+                            if (testimonial.tags && testimonial.tags.length > 0) {
+                                testimonial.tags.forEach(tag => {
+                                    tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
+                                });
+                            }
+                            
+                            // Preencher conteúdo
+                            testimonialElement.innerHTML = `
+                                <div class="testimonial-header">
+                                    <div>
+                                        <div class="testimonial-client">${testimonial.clientName || 'Cliente'}</div>
+                                        <div class="testimonial-date">${testimonial.date || 'Data não disponível'}</div>
+                                    </div>
+                                    <div class="testimonial-stars">${starsHTML}</div>
+                                </div>
+                                ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
+                                <div class="testimonial-text">${testimonial.message || ''}</div>
+                            `;
+                            
+                            testimonialsContainer.appendChild(testimonialElement);
                         });
                     } else {
                         noTestimonials.style.display = 'block';
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar depoimentos:', error);
-                    noTestimonials.innerHTML = `
-                        <i class="fas fa-wifi-slash fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
-                        <p>Não foi possível carregar os depoimentos no momento.</p>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">Atualize a página ou tente novamente mais tarde.</p>
-                    `;
-                    noTestimonials.style.display = 'block';
+                    console.error('Erro:', error);
                 }
-            }
-            
-            // Função para adicionar depoimento ao DOM
-            function addTestimonialToDOM(testimonial) {
-                // Criar elemento do depoimento
-                const testimonialElement = document.createElement('div');
-                testimonialElement.className = 'testimonial';
-                
-                // Criar estrelas baseadas na avaliação
-                let starsHTML = '';
-                for (let i = 1; i <= 5; i++) {
-                    if (i <= testimonial.rating) {
-                        starsHTML += '<i class="fas fa-star"></i>';
-                    } else {
-                        starsHTML += '<i class="far fa-star"></i>';
-                    }
-                }
-                
-                // Criar tags HTML
-                let tagsHTML = '';
-                if (testimonial.tags && testimonial.tags.length > 0) {
-                    testimonial.tags.forEach(tag => {
-                        tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
-                    });
-                }
-                
-                // Preencher conteúdo do depoimento
-                testimonialElement.innerHTML = `
-                    <div class="testimonial-header">
-                        <div>
-                            <div class="testimonial-client">${testimonial.clientName || 'Cliente'}</div>
-                            <div class="testimonial-date">${testimonial.date || 'Data não disponível'}</div>
-                        </div>
-                        <div class="testimonial-stars">${starsHTML}</div>
-                    </div>
-                    ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
-                    <div class="testimonial-text">${testimonial.message || ''}</div>
-                `;
-                
-                // Adicionar ao container
-                testimonialsContainer.appendChild(testimonialElement);
-            }
-            
-            // Função para atualizar o contador de depoimentos
-            function updateCounter(count) {
-                counterNumber.textContent = count;
             }
         });
     </script>
