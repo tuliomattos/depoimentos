@@ -495,7 +495,7 @@
         </footer>
     </div>
 
-    <!-- FORMULÁRIO INVISÍVEL PARA ENVIO NO CELULAR -->
+    <!-- FORMULÁRIO INVISÍVEL PARA CELULAR -->
     <form id="hiddenForm" method="POST" action="https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec" target="hiddenFrame" style="display: none;">
         <input type="hidden" name="clientName" id="hiddenClientName">
         <input type="hidden" name="rating" id="hiddenRating">
@@ -527,10 +527,10 @@
             // URL para leitura
             const READ_URL = "https://script.google.com/macros/s/AKfycbygD9XnYSyTD0BrVdb6U2TLLPlCWLbimyg7R-hSsj3i1o0y4BZhMt-NG6Htl3fd0McJiA/exec";
             
-            // Definir ano atual no footer
+            // Definir ano atual
             currentYear.textContent = new Date().getFullYear();
             
-            // Configurar a imagem de perfil
+            // Carregar imagem de perfil
             function loadProfileImage() {
                 const possiblePaths = [
                     'fotos/perfil.jpg',
@@ -544,55 +544,33 @@
                     './fotos/perfil.png'
                 ];
                 
-                let currentIndex = 0;
-                
-                function tryNextImage() {
-                    if (currentIndex >= possiblePaths.length) {
-                        profileImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjxwYXRoIGQ9Ik00MCA4MUM1OS44ODI3IDgxIDc2IDY0Ljg4MjcgNzYgNDVDNzYgMjUuMTE3MyA1OS44ODI3IDkgNDAgOUMyMC4xMTczIDkgNCAyNS4xExNzIDQgNDVDNCA2NC44ODI3IDIwLjExNzMgODEgNDAgODFaIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMzIiIHI9IjEyIiBmaWxsPSIjMWEzYTVmIi8+PC9zdmc+';
-                        return;
-                    }
-                    
-                    const imgPath = possiblePaths[currentIndex];
+                for (const path of possiblePaths) {
                     const img = new Image();
-                    
                     img.onload = function() {
-                        profileImage.src = imgPath;
+                        profileImage.src = path;
+                        return;
                     };
-                    
-                    img.onerror = function() {
-                        currentIndex++;
-                        tryNextImage();
-                    };
-                    
-                    img.src = imgPath;
+                    img.src = path;
                 }
-                
-                tryNextImage();
             }
             
-            // Carregar imagem de perfil
             loadProfileImage();
             
-            // Carregar depoimentos do Google Sheets ao iniciar
+            // Carregar depoimentos
             loadTestimonials();
             
-            // Atualizar contador de caracteres
+            // Contador de caracteres
             messageTextarea.addEventListener('input', function() {
-                const currentLength = this.value.length;
-                charCounter.textContent = `${currentLength}/500 caracteres`;
-                
-                if (currentLength > 480) {
-                    charCounter.classList.add('warning');
-                } else {
-                    charCounter.classList.remove('warning');
-                }
+                const length = this.value.length;
+                charCounter.textContent = `${length}/500 caracteres`;
+                charCounter.className = length > 480 ? 'char-counter warning' : 'char-counter';
             });
             
-            // Manipular envio do formulário
+            // Envio do formulário
             testimonialForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Obter valores do formulário
+                // Obter valores
                 const clientName = document.getElementById('clientName').value.trim();
                 const rating = document.querySelector('input[name="rating"]:checked');
                 const message = messageTextarea.value.trim();
@@ -610,75 +588,66 @@
                     return;
                 }
                 
-                // Preencher o formulário invisível
+                // Preencher formulário invisível
                 hiddenClientName.value = clientName || 'Cliente';
                 hiddenRating.value = rating.value;
                 hiddenTags.value = JSON.stringify(selectedTags);
                 hiddenMessage.value = message;
                 
-                // Mostrar mensagem de carregamento
+                // Mostrar carregamento
                 const submitBtn = document.querySelector('.btn-submit');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 submitBtn.disabled = true;
                 
-                // Enviar usando o formulário tradicional
+                // Enviar via formulário tradicional
                 hiddenForm.submit();
                 
-                // Mensagem para o usuário
-                alert('✅ Depoimento enviado com sucesso!');
+                // Mensagem otimista
+                alert('✅ Depoimento enviado! Pode levar alguns segundos para aparecer.');
                 
-                // Resetar formulário visível
+                // Resetar formulário
                 testimonialForm.reset();
                 charCounter.textContent = '0/500 caracteres';
-                charCounter.classList.remove('warning');
+                charCounter.className = 'char-counter';
                 
-                // Restaurar botão
+                // Restaurar botão e recarregar
                 setTimeout(function() {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                    
-                    // Recarregar depoimentos após 3 segundos
                     setTimeout(loadTestimonials, 3000);
                 }, 2000);
             });
             
-            // Função para carregar depoimentos
+            // Carregar depoimentos
             async function loadTestimonials() {
                 try {
                     const response = await fetch(READ_URL + '?t=' + Date.now());
-                    
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar');
-                    }
-                    
                     const testimonials = await response.json();
                     
                     // Atualizar contador
                     counterNumber.textContent = testimonials.length;
                     
-                    // Limpar depoimentos atuais
+                    // Limpar existentes
                     document.querySelectorAll('.testimonial').forEach(el => el.remove());
                     
                     if (testimonials.length > 0) {
                         noTestimonials.style.display = 'none';
                         
-                        // Adicionar cada depoimento
+                        // Adicionar depoimentos (mais recentes primeiro)
                         testimonials.reverse().forEach(testimonial => {
-                            const testimonialElement = document.createElement('div');
-                            testimonialElement.className = 'testimonial';
+                            const div = document.createElement('div');
+                            div.className = 'testimonial';
                             
-                            // Criar estrelas
-                            let starsHTML = '';
+                            // Estrelas
+                            let stars = '';
                             for (let i = 1; i <= 5; i++) {
-                                if (i <= testimonial.rating) {
-                                    starsHTML += '<i class="fas fa-star"></i>';
-                                } else {
-                                    starsHTML += '<i class="far fa-star"></i>';
-                                }
+                                stars += i <= testimonial.rating ? 
+                                    '<i class="fas fa-star"></i>' : 
+                                    '<i class="far fa-star"></i>';
                             }
                             
-                            // Criar tags
+                            // Tags
                             let tagsHTML = '';
                             if (testimonial.tags && testimonial.tags.length > 0) {
                                 testimonial.tags.forEach(tag => {
@@ -686,26 +655,26 @@
                                 });
                             }
                             
-                            // Preencher conteúdo
-                            testimonialElement.innerHTML = `
+                            // Conteúdo
+                            div.innerHTML = `
                                 <div class="testimonial-header">
                                     <div>
                                         <div class="testimonial-client">${testimonial.clientName || 'Cliente'}</div>
-                                        <div class="testimonial-date">${testimonial.date || 'Data não disponível'}</div>
+                                        <div class="testimonial-date">${testimonial.date || ''}</div>
                                     </div>
-                                    <div class="testimonial-stars">${starsHTML}</div>
+                                    <div class="testimonial-stars">${stars}</div>
                                 </div>
                                 ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
                                 <div class="testimonial-text">${testimonial.message || ''}</div>
                             `;
                             
-                            testimonialsContainer.appendChild(testimonialElement);
+                            testimonialsContainer.appendChild(div);
                         });
                     } else {
                         noTestimonials.style.display = 'block';
                     }
                 } catch (error) {
-                    console.error('Erro:', error);
+                    console.log('Erro ao carregar:', error);
                 }
             }
         });
