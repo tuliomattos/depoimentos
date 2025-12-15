@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depoimentos - Túlio Mattos Advogado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Cabeçalho */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #1a3a5f 0%, #2c5282 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 30px;
+        }
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .header-text {
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header .oab {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Contador de depoimentos */
+        .counter-container {
+            background-color: #4a5568;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 15px auto;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border: 2px solid #718096;
+        }
+
+        /* Seção de formulário */
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .form-section h2 {
+            color: #1a3a5f;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .star-rating-container {
+            margin-bottom: 25px;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            font-size: 2.2rem;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s;
+            margin-bottom: 0;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
+
+        .star-rating input:checked + label {
+            color: #ffc107;
+        }
+
+        .star-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #666;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .star-label-left {
+            text-align: left;
+            width: 120px;
+        }
+
+        .star-label-right {
+            text-align: right;
+            width: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f0f4f8;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background-color: #e1e8f0;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2c5282;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2c5282;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .char-counter.warning {
+            color: #e53e3e;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to right, #2c5282, #1a3a5f);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(43, 108, 176, 0.2);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Seção de depoimentos */
+        .testimonials-section {
+            margin-top: 50px;
+        }
+
+        .testimonials-section h2 {
+            color: #1a3a5f;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonial {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border-left: 5px solid #2c5282;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-client {
+            font-weight: 700;
+            color: #1a3a5f;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-date {
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .testimonial-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-tag {
+            background-color: #e6f2ff;
+            color: #2c5282;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .testimonial-text {
+            color: #444;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .no-testimonials {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #666;
+            border-top: 1px solid #e1e8f0;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header .oab {
+                font-size: 1.1rem;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .profile-img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .header-text {
+                text-align: center;
+            }
+            
+            .testimonials-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .star-labels {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="profile-container">
+                <!-- A imagem será carregada da pasta fotos/perfil.jpg -->
+                <img src="fotos/perfil.jpg" alt="Foto do Dr. Túlio Mattos" class="profile-img" id="profileImage">
+                <div class="header-text">
+                    <h1>Túlio Mattos Advogado</h1>
+                    <div class="oab">OAB/SP 347.117</div>
+                </div>
+            </div>
+            <p>Deixe uma avaliação de como foi o seu atendimento</p>
+            <div class="counter-container" id="depoimentosCounter">
+                <i class="fas fa-comment"></i> <span id="counterNumber">0</span> Depoimentos Registrados
+            </div>
+        </header>
+
+        <section class="form-section">
+            <h2>Deixe seu depoimento</h2>
+            
+            <form id="testimonialForm">
+                <div class="form-group">
+                    <label for="clientName">Seu nome (opcional):</label>
+                    <input type="text" id="clientName" name="clientName" placeholder="Como gostaria de ser identificado">
+                </div>
+
+                <div class="form-group star-rating-container">
+                    <label>Avaliação com estrelas:</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1"><i class="fas fa-star"></i></label>
+                    </div>
+                    <div class="star-labels">
+                        <div class="star-label-left">Não gostei</div>
+                        <div class="star-label-right">Excelente</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Selecione as características do atendimento:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="recommend" name="tags" value="recomendo">
+                            <label for="recommend">Recomendo este advogado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="attentive" name="tags" value="atendimento atencioso">
+                            <label for="attentive">Foi atencioso</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fast" name="tags" value="atendimento rápido">
+                            <label for="fast">Foi super rápido</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="knowledgeable" name="tags" value="conhecimento técnico">
+                            <label for="knowledgeable">Conhecimento técnico</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="clear" name="tags" value="comunicação clara">
+                            <label for="clear">Comunicação clara</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Seu depoimento (máximo 500 caracteres):</label>
+                    <textarea id="message" name="message" placeholder="Compartilhe sua experiência com o atendimento do Dr. Túlio Mattos..." maxlength="500"></textarea>
+                    <div class="char-counter" id="charCounter">0/500 caracteres</div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Salvar Depoimento
+                </button>
+            </form>
+        </section>
+
+        <section class="testimonials-section">
+            <h2>Depoimentos dos Clientes</h2>
+            <div class="testimonials-container" id="testimonialsContainer">
+                <!-- Depoimentos serão inseridos aqui via JavaScript -->
+                <div class="no-testimonials" id="noTestimonials">
+                    <i class="fas fa-comments fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+                    <p>Nenhum depoimento ainda. Seja o primeiro a compartilhar sua experiência!</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Túlio Mattos Advogado - OAB/SP 347.117</p>
+            <p>© <span id="currentYear"></span> - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do DOM
+            const testimonialForm = document.getElementById('testimonialForm');
+            const messageTextarea = document.getElementById('message');
+            const charCounter = document.getElementById('charCounter');
+            const testimonialsContainer = document.getElementById('testimonialsContainer');
+            const noTestimonials = document.getElementById('noTestimonials');
+            const counterNumber = document.getElementById('counterNumber');
+            const currentYear = document.getElementById('currentYear');
+            const profileImage = document.getElementById('profileImage');
+            
+            // Limpar depoimentos existentes (zera os comentários)
+            localStorage.removeItem('testimonials');
+            
+            // Definir ano atual no footer
+            currentYear.textContent = new Date().getFullYear();
+            
+            // Configurar a imagem de perfil para tentar vários caminhos possíveis
+            function loadProfileImage() {
+                const possiblePaths = [
+                    'fotos/perfil.jpg',
+                    'fotos/perfil.jpeg',
+                    'fotos/perfil.png',
+                    'perfil.jpg',
+                    'perfil.jpeg',
+                    'perfil.png'
+                ];
+                
+                let currentIndex = 0;
+                
+                function tryNextImage() {
+                    if (currentIndex >= possiblePaths.length) {
+                        // Todas as tentativas falharam, usar imagem padrão
+                        profileImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjxwYXRoIGQ9Ik00MCA4MUM1OS44ODI3IDgxIDc2IDY0Ljg4MjcgNzYgNDVDNzYgMjUuMTE3MyA1OS44ODI3IDkgNDAgOUMyMC4xMTczIDkgNCAyNS4xMTczIDQgNDVDNCA2NC44ODI3IDIwLjExNzMgODEgNDAgODFaIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMzIiIHI9IjEyIiBmaWxsPSIjMWEzYTVmIi8+PC9zdmc+';
+                        profileImage.alt = "Avatar padrão - Dr. Túlio Mattos";
+                        return;
+                    }
+                    
+                    const imgPath = possiblePaths[currentIndex];
+                    const img = new Image();
+                    
+                    img.onload = function() {
+                        profileImage.src = imgPath;
+                        profileImage.alt = "Foto do Dr. Túlio Mattos";
+                    };
+                    
+                    img.onerror = function() {
+                        currentIndex++;
+                        tryNextImage();
+                    };
+                    
+                    img.src = imgPath;
+                }
+                
+                tryNextImage();
+            }
+            
+            // Carregar imagem de perfil
+            loadProfileImage();
+            
+            // Carregar depoimentos do localStorage ao iniciar
+            loadTestimonials();
+            
+            // Atualizar contador de caracteres
+            messageTextarea.addEventListener('input', function() {
+                const currentLength = this.value.length;
+                charCounter.textContent = `${currentLength}/500 caracteres`;
+                
+                if (currentLength > 480) {
+                    charCounter.classList.add('warning');
+                } else {
+                    charCounter.classList.remove('warning');
+                }
+            });
+            
+            // Manipular envio do formulário
+            testimonialForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Obter valores do formulário
+                const clientName = document.getElementById('clientName').value.trim();
+                const rating = document.querySelector('input[name="rating"]:checked');
+                const message = messageTextarea.value.trim();
+                const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+                                        .map(checkbox => checkbox.value);
+                
+                // Validações
+                if (!rating) {
+                    alert('Por favor, selecione uma avaliação com estrelas.');
+                    return;
+                }
+                
+                if (message.length < 10) {
+                    alert('Por favor, escreva um depoimento com pelo menos 10 caracteres.');
+                    return;
+                }
+                
+                // Criar objeto do depoimento
+                const testimonial = {
+                    id: Date.now(), // ID único baseado no timestamp
+                    clientName: clientName || 'Cliente',
+                    rating: parseInt(rating.value),
+                    tags: selectedTags,
+                    message: message,
+                    date: new Date().toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })
+                };
+                
+                // Salvar depoimento
+                saveTestimonial(testimonial);
+                
+                // Adicionar depoimento à lista (no final)
+                addTestimonialToDOM(testimonial, true);
+                
+                // Atualizar contador
+                updateCounter();
+                
+                // Resetar formulário
+                testimonialForm.reset();
+                charCounter.textContent = '0/500 caracteres';
+                charCounter.classList.remove('warning');
+                
+                // Mostrar mensagem de sucesso
+                alert('Depoimento salvo com sucesso! Obrigado por compartilhar sua experiência.');
+            });
+            
+            // Função para salvar depoimento no localStorage
+            function saveTestimonial(testimonial) {
+                let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+                testimonials.push(testimonial); // Adicionar no final do array
+                localStorage.setItem('testimonials', JSON.stringify(testimonials));
+            }
+            
+            // Função para carregar depoimentos do localStorage
+            function loadTestimonials() {
+                const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+                
+                // Atualizar contador
+                updateCounter();
+                
+                if (testimonials.length > 0) {
+                    noTestimonials.style.display = 'none';
+                    
+                    // Adicionar cada depoimento ao DOM (na ordem em que foram salvos)
+                    testimonials.forEach(testimonial => {
+                        addTestimonialToDOM(testimonial, false);
+                    });
+                }
+            }
+            
+            // Função para adicionar depoimento ao DOM
+            function addTestimonialToDOM(testimonial, append) {
+                // Esconder mensagem "nenhum depoimento" se for o primeiro
+                if (noTestimonials.style.display !== 'none') {
+                    noTestimonials.style.display = 'none';
+                }
+                
+                // Criar elemento do depoimento
+                const testimonialElement = document.createElement('div');
+                testimonialElement.className = 'testimonial';
+                testimonialElement.dataset.id = testimonial.id;
+                
+                // Criar estrelas baseadas na avaliação
+                let starsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= testimonial.rating) {
+                        starsHTML += '<i class="fas fa-star"></i>';
+                    } else {
+                        starsHTML += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                // Criar tags HTML
+                let tagsHTML = '';
+                if (testimonial.tags && testimonial.tags.length > 0) {
+                    testimonial.tags.forEach(tag => {
+                        tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
+                    });
+                }
+                
+                // Preencher conteúdo do depoimento
+                testimonialElement.innerHTML = `
+                    <div class="testimonial-header">
+                        <div>
+                            <div class="testimonial-client">${testimonial.clientName}</div>
+                            <div class="testimonial-date">${testimonial.date}</div>
+                        </div>
+                        <div class="testimonial-stars">${starsHTML}</div>
+                    </div>
+                    ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
+                    <div class="testimonial-text">${testimonial.message}</div>
+                `;
+                
+                // Adicionar ao final da lista (append = true) ou carregar todos (append = false)
+                if (append) {
+                    testimonialsContainer.appendChild(testimonialElement);
+                } else {
+                    testimonialsContainer.appendChild(testimonialElement);
+                }
+            }
+            
+            // Função para atualizar o contador de depoimentos
+            function updateCounter() {
+                const testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+                counterNumber.textContent = testimonials.length;
+            }
+        });
+    </script>
+</body>
+</html>
