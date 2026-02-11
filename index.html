@@ -3,857 +3,746 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Processo Claro - Consultas Jurídicas por PIX</title>
+    <title>Depoimentos - Túlio Mattos Advogado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* RESET E ESTILOS GERAIS */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #f8f9fa;
+            background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
-            min-height: 100vh;
+            padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
-        
-        /* HEADER */
-        header {
-            background-color: #1a3c8b;
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #1a3a5f 0%, #2c5282 100%);
             color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
-        
-        .header-content {
+
+        .profile-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-        
-        .logo {
-            font-size: 2.4rem; /* Aumentado */
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-        
-        .logo span {
-            color: #4dabf7;
-            background: linear-gradient(90deg, #4dabf7, #339af0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        /* BOTÕES */
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
-            color: white;
-            padding: 14px 32px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(77, 171, 247, 0.3);
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(77, 171, 247, 0.4);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            color: #1a3c8b;
-            border: 2px solid #1a3c8b;
-            box-shadow: 0 4px 12px rgba(26, 60, 139, 0.1);
-        }
-        
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            box-shadow: 0 6px 16px rgba(26, 60, 139, 0.2);
-        }
-        
-        /* BOTÃO VOLTAR NO TOPO */
-        .back-top-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #1a3c8b;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .back-top-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-color: #4dabf7;
-        }
-        
-        /* HERO SECTION */
-        .hero {
-            padding: 5rem 0;
-            text-align: center;
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 80%, rgba(77, 171, 247, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            color: #1a3c8b;
-            line-height: 1.2;
-            position: relative;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 800px;
-            margin: 0 auto 2.5rem;
-            color: #495057;
-            position: relative;
-        }
-        
-        /* SEÇÕES */
-        .section {
-            padding: 4rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #1a3c8b;
-            font-size: 2.5rem;
-            position: relative;
-            padding-bottom: 1rem;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #4dabf7, #339af0);
-            border-radius: 2px;
-        }
-        
-        /* PLANOS */
-        .plans {
-            display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 2.5rem;
+            margin-bottom: 20px;
+            gap: 30px;
         }
-        
-        .plan-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            border: 2px solid #e9ecef;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
         }
-        
-        .plan-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #4dabf7, #339af0);
+
+        .header-text {
+            text-align: left;
         }
-        
-        .plan-card:hover {
-            transform: translateY(-10px);
-            border-color: #4dabf7;
-            box-shadow: 0 15px 40px rgba(77, 171, 247, 0.2);
-        }
-        
-        .plan-card.featured {
-            border-color: #4dabf7;
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(77, 171, 247, 0.25);
-        }
-        
-        .plan-card.featured::before {
-            height: 8px;
-            background: linear-gradient(90deg, #4dabf7, #25D366);
-        }
-        
-        .plan-card.featured:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-        
-        .plan-name {
-            font-size: 1.75rem;
-            color: #1a3c8b;
-            margin-bottom: 1rem;
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
             font-weight: 700;
         }
-        
-        .plan-price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #4dabf7;
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
+
+        .header .oab {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
         }
-        
-        .plan-price::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #4dabf7, transparent);
-        }
-        
-        .plan-features {
-            list-style: none;
-            margin-bottom: 2.5rem;
-        }
-        
-        .plan-features li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f3f5;
-            display: flex;
-            align-items: center;
-        }
-        
-        .plan-features li:before {
-            content: "✓";
-            color: #25D366;
-            margin-right: 12px;
-            font-weight: bold;
+
+        .header p {
             font-size: 1.2rem;
-            background: #e8f5e9;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        /* PÁGINA DE PAGAMENTO */
-        .payment-page {
-            display: none;
             max-width: 700px;
-            margin: 2rem auto;
-            padding: 0;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s ease-in-out;
-            overflow: hidden;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .payment-header-container {
-            background: linear-gradient(135deg, #1a3c8b 0%, #2d55b8 100%);
-            padding: 2.5rem;
+
+        .counter-container {
+            background-color: #4a5568;
             color: white;
-            text-align: center;
-            position: relative;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 15px auto;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border: 2px solid #718096;
         }
-        
-        .payment-header {
+
+        .form-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .form-section h2 {
+            color: #1a3a5f;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .star-rating-container {
+            margin-bottom: 25px;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            font-size: 2.2rem;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s;
             margin-bottom: 0;
         }
-        
-        .payment-header .logo {
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
         }
-        
-        .payment-header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            color: white;
+
+        .star-rating input:checked + label {
+            color: #ffc107;
         }
-        
-        .payment-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+
+        .star-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #666;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
-        
-        .payment-content {
-            padding: 2.5rem;
+
+        .star-label-left {
+            text-align: left;
+            width: 120px;
         }
-        
-        .qrcode-container {
-            margin: 2rem auto;
-            padding: 2rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 16px;
-            border: 2px dashed #4dabf7;
-            text-align: center;
-            position: relative;
+
+        .star-label-right {
+            text-align: right;
+            width: 120px;
         }
-        
-        .qrcode {
-            width: 240px;
-            height: 240px;
-            margin: 0 auto 1.5rem;
-            background: white;
-            border-radius: 12px;
-            padding: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
         }
-        
-        .qrcode img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .pix-code {
-            background: #f8f9fa;
-            padding: 1.25rem;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            font-family: 'Monaco', 'Courier New', monospace;
-            word-break: break-all;
-            border: 1px solid #dee2e6;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            position: relative;
-        }
-        
-        .copy-btn {
-            display: inline-flex;
+
+        .checkbox-item {
+            display: flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
-            color: white;
-            padding: 12px 24px;
+            background-color: #f0f4f8;
+            padding: 10px 15px;
             border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 1rem 0;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: background-color 0.3s;
         }
-        
-        .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+
+        .checkbox-item:hover {
+            background-color: #e1e8f0;
         }
-        
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 2rem;
-            transition: all 0.3s ease;
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        input[type="text"] {
             width: 100%;
-            text-align: center;
-            font-size: 1.1rem;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
-        }
-        
-        .whatsapp-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-        }
-        
-        .nubank-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin: 1.5rem 0;
-            padding: 1.25rem;
-            background: linear-gradient(135deg, #8A05BE 0%, #6B2A8C 100%);
-            color: white;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(138, 5, 190, 0.3);
-        }
-        
-        .nubank-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(138, 5, 190, 0.4);
-            color: white;
-        }
-        
-        .instructions {
-            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
-            padding: 1.75rem;
-            border-radius: 12px;
-            margin: 2rem 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            border-left: 4px solid #4dabf7;
+            transition: border 0.3s;
         }
-        
-        /* FOOTER */
-        footer {
-            background: linear-gradient(135deg, #1a3c8b 0%, #2d55b8 100%);
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-            margin-top: 4rem;
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2c5282;
         }
-        
-        .footer-logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            transition: border 0.3s;
         }
-        
-        .footer-logo span {
-            color: #4dabf7;
-            background: linear-gradient(90deg, #4dabf7, #339af0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+
+        textarea:focus {
+            outline: none;
+            border-color: #2c5282;
         }
-        
-        .disclaimer {
+
+        .char-counter {
+            text-align: right;
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 800px;
-            margin: 1.5rem auto;
-            line-height: 1.6;
+            color: #666;
+            margin-top: 5px;
         }
-        
-        /* ETAPAS */
-        .steps {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin: 4rem 0;
-            flex-wrap: wrap;
+
+        .char-counter.warning {
+            color: #e53e3e;
         }
-        
-        .step {
-            text-align: center;
-            max-width: 220px;
-            position: relative;
-        }
-        
-        .step-number {
-            background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
+
+        .btn-submit {
+            background: linear-gradient(to right, #2c5282, #1a3a5f);
             color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            font-weight: bold;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 6px 15px rgba(77, 171, 247, 0.3);
-        }
-        
-        .step h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            color: #1a3c8b;
-        }
-        
-        /* CONTROLE DE VISIBILIDADE */
-        #main-content {
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
             display: block;
+            margin: 0 auto;
+            font-weight: 600;
         }
-        
-        /* RESPONSIVIDADE */
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(43, 108, 176, 0.2);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .testimonials-section {
+            margin-top: 50px;
+        }
+
+        .testimonials-section h2 {
+            color: #1a3a5f;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonial {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border-left: 5px solid #2c5282;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-client {
+            font-weight: 700;
+            color: #1a3a5f;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-client-city {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        .testimonial-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-date {
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .testimonial-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-tag {
+            background-color: #e6f2ff;
+            color: #2c5282;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .testimonial-text {
+            color: #444;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .no-testimonials {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #666;
+            border-top: 1px solid #e1e8f0;
+        }
+
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-            
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .footer-logo {
-                font-size: 1.8rem;
-            }
-            
-            .hero h1 {
+            .header h1 {
                 font-size: 2.2rem;
             }
             
-            .plan-card.featured {
-                transform: none;
+            .header .oab {
+                font-size: 1.1rem;
             }
             
-            .plan-card.featured:hover {
-                transform: translateY(-10px);
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
             }
             
-            .steps {
-                gap: 2rem;
+            .profile-img {
+                width: 120px;
+                height: 120px;
             }
             
-            .payment-page {
-                margin: 1rem;
-                border-radius: 16px;
+            .header-text {
+                text-align: center;
             }
             
-            .payment-content {
-                padding: 1.5rem;
+            .testimonials-container {
+                grid-template-columns: 1fr;
             }
             
-            .qrcode {
-                width: 200px;
-                height: 200px;
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
             }
             
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .plan-price {
-                font-size: 2.5rem;
+            .star-labels {
+                max-width: 300px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">Processo<span>Claro</span></div>
-            <!-- BOTÃO VOLTAR (APENAS NA PÁGINA DE PAGAMENTO) -->
-            <div id="back-top-container" style="display: none;">
-                <button class="back-top-btn" onclick="showMainPage()">
-                    ← Voltar para os planos
+    <div class="container">
+        <header class="header">
+            <div class="profile-container">
+                <img src="./fotos/perfil.jpeg" alt="Dr. Túlio Mattos" class="profile-img" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgdmlld0JveD0iMCAwIDEzMCAxMzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjUiIGN5PSI2NSIgcj0iNjAiIGZpbGw9IiMxYTNhNWYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjY1IiB5PSI3NSIgZm9udC1zaXplPSI0NSIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+VE08L3RleHQ+PC9zdmc+'">
+                <div class="header-text">
+                    <h1>Túlio Mattos Advogado</h1>
+                    <div class="oab">OAB/SP 347.117</div>
+                </div>
+            </div>
+            <p>Deixe uma avaliação de como foi o seu atendimento</p>
+            <div class="counter-container" id="depoimentosCounter">
+                <i class="fas fa-comment"></i> <span id="counterNumber">0</span> Depoimentos Registrados
+            </div>
+        </header>
+
+        <section class="form-section">
+            <h2>Deixe seu depoimento</h2>
+            
+            <form id="testimonialForm">
+                <div class="form-group">
+                    <label for="clientName">Seu nome (opcional):</label>
+                    <input type="text" id="clientName" name="clientName" placeholder="Como gostaria de ser identificado">
+                </div>
+
+                <div class="form-group">
+                    <label for="clientCity">Sua cidade (opcional):</label>
+                    <input type="text" id="clientCity" name="clientCity" placeholder="Ex: São Paulo, Campinas, etc.">
+                </div>
+
+                <div class="form-group star-rating-container">
+                    <label>Avaliação com estrelas:</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1"><i class="fas fa-star"></i></label>
+                    </div>
+                    <div class="star-labels">
+                        <div class="star-label-left">Não gostei</div>
+                        <div class="star-label-right">Excelente</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Selecione as características do atendimento:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="recommend" name="tags" value="recomendo">
+                            <label for="recommend">Recomendo este advogado</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="attentive" name="tags" value="atendimento atencioso">
+                            <label for="attentive">Foi atencioso</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fast" name="tags" value="atendimento rápido">
+                            <label for="fast">Foi super rápido</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="knowledgeable" name="tags" value="conhecimento técnico">
+                            <label for="knowledgeable">Conhecimento técnico</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="clear" name="tags" value="comunicação clara">
+                            <label for="clear">Comunicação clara</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Seu depoimento (máximo 500 caracteres):</label>
+                    <textarea id="message" name="message" placeholder="Compartilhe sua experiência com o atendimento do Dr. Túlio Mattos..." maxlength="500"></textarea>
+                    <div class="char-counter" id="charCounter">0/500 caracteres</div>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Salvar Depoimento
                 </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- CONTEÚDO PRINCIPAL (PLANOS) -->
-    <div id="main-content">
-        <!-- HERO SECTION -->
-        <section class="hero" id="home">
-            <div class="container">
-                <h1>Explicamos o seu processo sem juridiquês</h1>
-                <p>Consulte o andamento do seu processo e receba explicações em linguagem simples. <strong>Pagamento único por PIX</strong> - sem mensalidade!</p>
-                <a href="#planos" class="btn" onclick="smoothScroll('#planos')">Ver Opções de Consulta</a>
-            </div>
+            </form>
         </section>
 
-        <!-- COMO FUNCIONA -->
-        <section class="section" id="como-funciona">
-            <div class="container">
-                <h2 class="section-title">Como Funciona - É Simples!</h2>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h3>Escolha a Consulta</h3>
-                        <p>Selecione o tipo de explicação que você deseja</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h3>Pague via PIX</h3>
-                        <p>Faça o pagamento único com QR Code ou código PIX</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h3>Envie Comprovante</h3>
-                        <p>Encaminhe o comprovante pelo WhatsApp</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <h3>Receba a Resposta</h3>
-                        <p>Obtenha sua explicação detalhada</p>
-                    </div>
-                </div>
-            </section>
-
-        <!-- PLANOS (CONSULTAS) -->
-        <section class="section" id="planos">
-            <div class="container">
-                <h2 class="section-title">Escolha sua Consulta</h2>
-                <p style="text-align: center; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-                    <strong>Pagamento único por PIX</strong> - Após o pagamento, você deverá clicar no botão do WhatsApp que aparecerá para enviar o comprovante e fornecer os dados do seu processo para consulta, como número do processo e senha caso seja um processo sob segredo de justiça.
-                </p>
-                
-                <div class="plans">
-                    <!-- Consulta 1 -->
-                    <div class="plan-card">
-                        <h3 class="plan-name">Consulta Básica</h3>
-                        <div class="plan-price">R$ 9,90</div>
-                        <ul class="plan-features">
-                            <li>Explicação do status atual</li>
-                            <li>Tradução dos termos jurídicos</li>
-                            <li>Próximos passos esperados</li>
-                            <li>Resposta em até 24h</li>
-                            <li>Entrega por WhatsApp/Email</li>
-                        </ul>
-                        <button class="btn btn-secondary" onclick="showPaymentPage('Consulta Básica', 9.90, 'qrcod/QRCOD 9,90.jpg', '00020126330014BR.GOV.BCB.PIX01113423761989352040000530398654049.905802BR5925Tulio Cesar de Castro Mat6009SAO PAULO62140510l1mE58jwN76304D108', '24 horas')">Selecionar</button>
-                    </div>
-                    
-                    <!-- Consulta 2 -->
-                    <div class="plan-card featured">
-                        <div style="background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%); color: white; padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 600; box-shadow: 0 4px 8px rgba(77, 171, 247, 0.3);">MAIS POPULAR</div>
-                        <h3 class="plan-name">Análise Intermediária</h3>
-                        <div class="plan-price">R$ 29,90</div>
-                        <ul class="plan-features">
-                            <li>Explicação dos pedidos e status atual</li>
-                            <li>Análise de pontos fortes/fracos</li>
-                            <li>Explicação das etapas do processo</li>
-                            <li>Possíveis cenários futuros</li>
-                            <li>Relatório em formato PDF</li>
-                            <li>Direito a uma perguntas pelo WhatsApp</li>
-                            <li>Resposta em até 48h</li>
-                        </ul>
-                        <button class="btn" onclick="showPaymentPage('Análise Intermediária', 29.90, 'qrcod/QRCOD 29,90.jpg', '00020126580014BR.GOV.BCB.PIX0136331058c2-a5db-49f3-add9-84f4748aaddf520400005303986540529.905802BR5925Tulio Cesar de Castro Mat6009SAO PAULO61080540900062250521YexjFzrbIqc4txJ1903w463042A7E', '48 horas')">Selecionar</button>
-                    </div>
-                    
-                    <!-- Consulta 3 -->
-                    <div class="plan-card">
-                        <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%); color: white; padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 600; box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);">PREMIUM</div>
-                        <h3 class="plan-name">Consulta Premium</h3>
-                        <div class="plan-price">R$ 49,90</div>
-                        <ul class="plan-features">
-                            <li>Explicação completa do processo</li>
-                            <li>Explicação dos pedidos e da fase atual</li>
-                            <li>Explicação detalhada das etapas</li>
-                            <li>Explicação de sentenças</li>
-			    <li>Envio das peças disponiveis no processo</li>
-                            <li>Sugestões de questionamentos</li>
-                            <li>Análise dos possíveis cenários</li>
-                            <li>Direito a duas perguntas no WhatsApp</li>
-			    <li>Direito a uma chamada de video de 5 minutos</li>
-                            <li>Prioridade na resposta (12h)</li>
-                            <li>Relatório completo + resumo</li>
-                        </ul>
-                        <button class="btn btn-secondary" onclick="showPaymentPage('Consulta Premium', 49.90, 'qrcod/QRCOD 49,90.jpg', '00020126330014BR.GOV.BCB.PIX011134237619893520400005303986540549.905802BR5925Tulio Cesar de Castro Mat6009SAO PAULO6214051021lDpjpg9W63040D29', '12 horas')">Selecionar</button>
-                    </div>
+        <section class="testimonials-section">
+            <h2>Depoimentos dos Clientes</h2>
+            <div class="testimonials-container" id="testimonialsContainer">
+                <div class="no-testimonials" id="noTestimonials">
+                    <i class="fas fa-comments fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+                    <p>Nenhum depoimento ainda. Seja o primeiro a compartilhar sua experiência!</p>
                 </div>
             </div>
         </section>
 
-        <!-- CONTATO -->
-        <section class="section" id="contato" style="background: linear-gradient(135deg, #f1f5f9 0%, #e9ecef 100%);">
-            <div class="container">
-                <h2 class="section-title">Dúvidas?</h2>
-                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                    <p style="margin-bottom: 2rem; font-size: 1.1rem;">Entre em contato conosco antes de comprar se tiver qualquer dúvida sobre nossos serviços.</p>
-                    <a href="https://wa.me/5516992705639?text=Olá! Tenho uma dúvida sobre as consultas do Processo Claro" class="whatsapp-btn" target="_blank" style="display: inline-flex; width: auto;">
-                        <span>Falar no WhatsApp</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer>
-            <div class="container">
-                <div class="footer-logo">Processo<span>Claro</span></div>
-                <p style="font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.9;">Seu processo explicado em linguagem simples, sem juridiquês.</p>
-                <div class="disclaimer">
-                    Processo Claro é um serviço informativo e consultivo para explicação de processos judiciais em linguagem simples. Não realizamos representação processual, não substituímos a atuação de um advogado regular e não garantimos resultados ou prazos processuais. Serviço prestado mediante pagamento único por consulta.
-                </div>
-            </div>
+        <footer class="footer">
+            <p>Túlio Mattos Advogado - OAB/SP 347.117</p>
+            <p>© <span id="currentYear"></span> - Todos os direitos reservados</p>
         </footer>
     </div>
 
-    <!-- PÁGINA DE PAGAMENTO (ESCONDIDA INICIALMENTE) -->
-    <div id="payment-content" class="payment-page">
-        <div class="payment-header-container">
-            <div class="payment-header">
-                <div class="logo">Processo<span>Claro</span></div>
-                <h1 id="payment-plan-name">Consulta Básica</h1>
-                <p id="payment-plan-price">R$ 9,90 - Pagamento único via PIX</p>
-            </div>
-        </div>
-        
-        <div class="payment-content">
-            <div class="qrcode-container">
-                <div class="qrcode">
-                    <img id="payment-qrcode" src="" alt="QR Code PIX">
-                </div>
-                <p style="font-size: 1.1rem; font-weight: 600;"><strong>Escaneie o QR Code com seu app bancário</strong></p>
-            </div>
-            
-            <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Ou copie o código PIX:</p>
-            <div class="pix-code" id="payment-pix-code"></div>
-            <button class="copy-btn" onclick="copyPixCode()">
-                📋 Copiar Código PIX
-            </button>
-            
-            <!-- LINK NUBANK - ABRE EM NOVA ABA -->
-            <a href="https://nubank.com.br/cobrar/1903w4/698a62e4-81a1-44a0-be3d-b8ddbc1e0e6e" class="nubank-link" target="_blank" rel="noopener noreferrer">
-                💜 Se estiver com dificuldade de pagamento, clique aqui para pagar pelo Nubank
-            </a>
-            
-            <div class="instructions">
-                <strong style="display: block; margin-bottom: 0.75rem; font-size: 1.1rem;">Instruções:</strong>
-                1. Faça o pagamento via PIX usando o QR Code, código PIX ou link Nubank acima<br>
-                2. Clique no botão abaixo para ir para nosso WhatsApp<br>
-                3. Envie o comprovante de pagamento e o número do processo<br>
-                4. Informe também a senha caso seja um processo sob segredo de justiça<br>
-                5. Aguarde nossa resposta em até <span id="payment-time" style="font-weight: 700;">24 horas</span>
-            </div>
-            
-            <!-- LINK WHATSAPP - ABRE EM NOVA ABA -->
-            <a href="#" class="whatsapp-btn" id="payment-whatsapp-link" target="_blank" rel="noopener noreferrer">
-                📱 Ir para WhatsApp e Enviar Comprovante
-            </a>
-            
-            <!-- Botão voltar removido daqui (agora está no topo) -->
-        </div>
-    </div>
-
     <script>
-        // Função para mostrar a página de pagamento
-        function showPaymentPage(planName, price, qrCodeImage, pixCode, responseTime) {
-            // Esconder conteúdo principal
-            document.getElementById('main-content').style.display = 'none';
-            
-            // Mostrar botão voltar no topo
-            document.getElementById('back-top-container').style.display = 'block';
-            
-            // Atualizar dados da página de pagamento
-            document.getElementById('payment-plan-name').textContent = planName;
-            document.getElementById('payment-plan-price').textContent = `R$ ${price.toFixed(2).replace('.', ',')} - Pagamento único via PIX`;
-            document.getElementById('payment-pix-code').textContent = pixCode;
-            document.getElementById('payment-time').textContent = responseTime;
-            
-            // Atualizar imagem do QR Code
-            const qrCodeImg = document.getElementById('payment-qrcode');
-            qrCodeImg.src = qrCodeImage;
-            qrCodeImg.alt = `QR Code PIX ${planName} - R$ ${price.toFixed(2).replace('.', ',')}`;
-            
-            // Atualizar link do WhatsApp
-            const whatsappNumber = "5516992705639";
-            const whatsappMessage = `Olá! Acabei de pagar a ${planName.toUpperCase()} (R$ ${price.toFixed(2).replace('.', ',')}) do Processo Claro. Segue comprovante:`;
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-            document.getElementById('payment-whatsapp-link').href = whatsappUrl;
-            
-            // Mostrar página de pagamento
-            document.getElementById('payment-content').style.display = 'block';
-            
-            // Scroll para o topo
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Função para voltar à página principal
-        function showMainPage() {
-            // Esconder página de pagamento
-            document.getElementById('payment-content').style.display = 'none';
-            
-            // Esconder botão voltar no topo
-            document.getElementById('back-top-container').style.display = 'none';
-            
-            // Mostrar conteúdo principal
-            document.getElementById('main-content').style.display = 'block';
-            
-            // Scroll para o topo
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Função para copiar código PIX
-        function copyPixCode() {
-            const pixCode = document.getElementById('payment-pix-code').textContent;
-            navigator.clipboard.writeText(pixCode).then(() => {
-                alert('Código PIX copiado! Agora cole no seu app bancário.');
-            }).catch(err => {
-                // Fallback para navegadores mais antigos
-                const textArea = document.createElement('textarea');
-                textArea.value = pixCode;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('Código PIX copiado! Agora cole no seu app bancário.');
-            });
-        }
-        
-        // Função para scroll suave
-        function smoothScroll(targetId) {
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        }
-        
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Garantir que apenas o conteúdo principal seja visível inicialmente
-            document.getElementById('main-content').style.display = 'block';
-            document.getElementById('payment-content').style.display = 'none';
-            document.getElementById('back-top-container').style.display = 'none';
+            // ⭐⭐ URL DO SEU GOOGLE APPS SCRIPT ⭐⭐
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEVh-Q__rfQk1ZJ203oEtanAIlpoW-AqsjAr8TUBM5cKUE2hXB_fuDqcrO17ck_pTneA/exec";
+            
+            // Elementos
+            const formulario = document.getElementById('testimonialForm');
+            const textarea = document.getElementById('message');
+            const contador = document.getElementById('charCounter');
+            const container = document.getElementById('testimonialsContainer');
+            const semDepoimentos = document.getElementById('noTestimonials');
+            const contadorNumero = document.getElementById('counterNumber');
+            const ano = document.getElementById('currentYear');
+            
+            // Ano atual
+            ano.textContent = new Date().getFullYear();
+            
+            // Carregar depoimentos ao iniciar
+            carregarDepoimentos();
+            
+            // Contador de caracteres
+            textarea.addEventListener('input', function() {
+                const tamanho = this.value.length;
+                contador.textContent = tamanho + '/500 caracteres';
+                contador.className = tamanho > 480 ? 'char-counter warning' : 'char-counter';
+            });
+            
+            // ENVIO DO FORMULÁRIO
+            formulario.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Pegar dados
+                const nome = document.getElementById('clientName').value.trim() || 'Cliente';
+                const cidade = document.getElementById('clientCity').value.trim() || '';
+                const estrela = document.querySelector('input[name="rating"]:checked');
+                const mensagem = textarea.value.trim();
+                const tagsMarcadas = document.querySelectorAll('input[name="tags"]:checked');
+                const tags = Array.from(tagsMarcadas).map(cb => cb.value);
+                
+                // Validar
+                if (!estrela) {
+                    alert('Por favor, selecione uma avaliação com estrelas.');
+                    return;
+                }
+                
+                if (mensagem.length < 10) {
+                    alert('Por favor, escreva um depoimento com pelo menos 10 caracteres.');
+                    return;
+                }
+                
+                // Botão de loading
+                const botao = document.querySelector('.btn-submit');
+                const textoOriginal = botao.innerHTML;
+                botao.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                botao.disabled = true;
+                
+                // Criar link de envio
+                const linkEnvio = SCRIPT_URL + '?' +
+                    'clientName=' + encodeURIComponent(nome) +
+                    '&clientCity=' + encodeURIComponent(cidade) +
+                    '&rating=' + estrela.value +
+                    '&tags=' + encodeURIComponent(JSON.stringify(tags)) +
+                    '&message=' + encodeURIComponent(mensagem);
+                
+                // Método universal que funciona em qualquer dispositivo
+                enviarDepoimento(linkEnvio);
+                
+                function enviarDepoimento(url) {
+                    // Usar um iframe oculto para enviar os dados
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.style.width = '0';
+                    iframe.style.height = '0';
+                    iframe.style.border = 'none';
+                    iframe.src = url;
+                    
+                    // Adicionar iframe à página
+                    document.body.appendChild(iframe);
+                    
+                    // Quando o iframe carregar (envio concluído)
+                    iframe.onload = function() {
+                        // Mostrar mensagem de sucesso
+                        mostrarMensagemSucesso();
+                        
+                        // Limpar formulário
+                        formulario.reset();
+                        contador.textContent = '0/500 caracteres';
+                        contador.className = 'char-counter';
+                        
+                        // Restaurar botão
+                        botao.innerHTML = textoOriginal;
+                        botao.disabled = false;
+                        
+                        // Remover iframe
+                        setTimeout(() => {
+                            if (iframe.parentNode) {
+                                document.body.removeChild(iframe);
+                            }
+                        }, 100);
+                        
+                        // Recarregar depoimentos
+                        setTimeout(carregarDepoimentos, 1000);
+                    };
+                    
+                    // Fallback: se o onload não disparar, fazer após 2 segundos
+                    setTimeout(function() {
+                        if (iframe.parentNode) {
+                            mostrarMensagemSucesso();
+                            formulario.reset();
+                            contador.textContent = '0/500 caracteres';
+                            contador.className = 'char-counter';
+                            botao.innerHTML = textoOriginal;
+                            botao.disabled = false;
+                            document.body.removeChild(iframe);
+                            setTimeout(carregarDepoimentos, 1000);
+                        }
+                    }, 2000);
+                }
+            });
+            
+            // Função para mostrar mensagem de sucesso
+            function mostrarMensagemSucesso() {
+                // Criar mensagem temporária
+                const mensagem = document.createElement('div');
+                mensagem.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: #2ecc71;
+                        color: white;
+                        padding: 15px 25px;
+                        border-radius: 8px;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                        z-index: 9999;
+                        animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s;
+                        font-weight: 500;
+                    ">
+                        <i class="fas fa-check-circle"></i> Depoimento salvo com sucesso!
+                    </div>
+                `;
+                
+                // Adicionar ao corpo
+                document.body.appendChild(mensagem.firstElementChild);
+                
+                // Remover após 3 segundos
+                setTimeout(() => {
+                    const msg = document.querySelector('div[style*="position: fixed"]');
+                    if (msg && msg.parentNode) {
+                        msg.parentNode.removeChild(msg);
+                    }
+                }, 3000);
+                
+                // Adicionar estilos de animação se não existirem
+                if (!document.querySelector('#success-animation')) {
+                    const style = document.createElement('style');
+                    style.id = 'success-animation';
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from { transform: translateX(100%); opacity: 0; }
+                            to { transform: translateX(0); opacity: 1; }
+                        }
+                        @keyframes slideOut {
+                            from { transform: translateX(0); opacity: 1; }
+                            to { transform: translateX(100%); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+            
+            // Função para formatar data no padrão brasileiro
+            function formatarDataBR(dataString) {
+                if (!dataString) return '';
+                
+                try {
+                    const data = new Date(dataString);
+                    // Formato: DD/MM/AAAA
+                    return data.toLocaleDateString('pt-BR');
+                } catch (erro) {
+                    return dataString; // Retorna original se der erro
+                }
+            }
+            
+            // Carregar depoimentos da planilha
+            async function carregarDepoimentos() {
+                try {
+                    const resposta = await fetch(SCRIPT_URL + '?t=' + Date.now());
+                    const depoimentos = await resposta.json();
+                    
+                    // Atualizar contador
+                    contadorNumero.textContent = depoimentos.length || 0;
+                    
+                    // Limpar depoimentos atuais
+                    document.querySelectorAll('.testimonial').forEach(el => el.remove());
+                    
+                    if (depoimentos.length > 0) {
+                        semDepoimentos.style.display = 'none';
+                        
+                        // Mostrar depoimentos (mais recentes primeiro)
+                        depoimentos.reverse().forEach(dep => {
+                            const div = document.createElement('div');
+                            div.className = 'testimonial';
+                            
+                            // Criar estrelas
+                            let estrelasHTML = '';
+                            for (let i = 1; i <= 5; i++) {
+                                estrelasHTML += i <= dep.rating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+                            }
+                            
+                            // Criar tags
+                            let tagsHTML = '';
+                            if (dep.tags && dep.tags.length > 0) {
+                                dep.tags.forEach(tag => {
+                                    tagsHTML += `<span class="testimonial-tag">${tag}</span>`;
+                                });
+                            }
+                            
+                            // Preencher conteúdo
+                            div.innerHTML = `
+                                <div class="testimonial-header">
+                                    <div>
+                                        <div class="testimonial-client">${dep.clientName || 'Cliente'}</div>
+                                        ${dep.clientCity ? `<div class="testimonial-client-city">${dep.clientCity}</div>` : ''}
+                                        <div class="testimonial-date">${formatarDataBR(dep.date)}</div>
+                                    </div>
+                                    <div class="testimonial-stars">${estrelasHTML}</div>
+                                </div>
+                                ${tagsHTML ? `<div class="testimonial-tags">${tagsHTML}</div>` : ''}
+                                <div class="testimonial-text">${dep.message || ''}</div>
+                            `;
+                            
+                            container.appendChild(div);
+                        });
+                    } else {
+                        semDepoimentos.style.display = 'block';
+                    }
+                } catch (erro) {
+                    console.log('Erro ao carregar depoimentos:', erro);
+                }
+            }
         });
     </script>
 </body>
